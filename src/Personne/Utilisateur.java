@@ -204,11 +204,6 @@ public class Utilisateur extends Personne{
 	    empruntsActifs.add(emprunt);
 	}
 
-	public void rendreEmprunt(Emprunt emprunt) {
-		 emprunt.getRessource().setLibre(true); // Rendre la ressource disponible
-		 empruntsActifs.remove(emprunt);
-	}
-
 	public ArrayList<Emprunt> getEmpruntsActifs() {
 	    return empruntsActifs;
 	}
