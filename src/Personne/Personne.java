@@ -14,7 +14,6 @@ public class Personne {
 		this.date_naissance=date_naissance;
 		this.login=login;
 		this.mdp=mdp;
-		
 	}
 
 	public String getNom() {
@@ -49,7 +48,6 @@ public class Personne {
 		this.mdp = mdp;
 	}
 	
-	@Override
 	public String toString() {
 		return "Personne [nom=" + nom + ", date_naissance=" + date_naissance + ", login=" + login + ", mdp=" + mdp
 				+ "]";

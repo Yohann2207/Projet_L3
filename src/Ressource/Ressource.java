@@ -39,10 +39,14 @@ public class Ressource {
     	
     }
     
-	@Override
 	public String toString() {
-		return "Ressource [marque=" + marque + ", autonomie=" + autonomie + ", nb_coeurs=" + nb_coeurs + ", memoire="
-				+ memoire + ", resolution_ecran=" + resolution_ecran + ", prix=" + prix + ", etat=" + etat + "]";
+		return getClass().getSimpleName() + " [marque=" + marque 
+        + ", autonomie=" + autonomie + "h"
+        + ", nb_coeurs=" + nb_coeurs
+        + ", memoire=" + memoire + "Go"
+        + ", resolution_ecran=" + resolution_ecran + "px"
+        + ", prix=" + prix + "euros"
+        + ", etat=" + etat + "]";
 	}
 
 	public boolean isLibre() {

@@ -1,8 +1,6 @@
 package Transaction;
 
 import java.time.LocalDate;
-
-
 import Personne.Utilisateur;
 import Ressource.Ressource;
 
@@ -30,13 +28,12 @@ public class Emprunt {
 	    System.out.println("Date limite calculee : " + this.date_limite);
 	}
 	
-
+	//Durée max de l'emprunt
 	public void setDuree() {
 		duree_max=ressource.getDuree_max();
 		if (utilisateur.getIs_premium()) {
 			duree_max=duree_max+15;
 		}
-		
 	}
 	
 	public void setDate_rendu(LocalDate date) {
@@ -63,22 +60,18 @@ public class Emprunt {
 		this.date_limite=getDate_emprunt().plusDays(duree_max); 
 	}
 	
-	public void terminerEmprunt() {
-	    this.date_rendu = LocalDate.now(); // Enregistre la date de retour
-	    this.ressource.setLibre(true); // Marque la ressource comme disponible
-	    this.etat = "Terminé";
-	}
-	
 	public Ressource getRessource() {
 	    return this.ressource;
 	}
 	
-	@Override
 	public String toString() {
-		return "Emprunt [utilisateur=" + utilisateur + ", ressource=" + ressource + ", date_emprunt=" + date_emprunt
+		return "Emprunt " + "[ressource=" + ressource + ", date_emprunt=" + date_emprunt
 				+ ", duree_max=" + duree_max + ", date_rendu=" + date_rendu + ", etat=" + etat + ", date_limite="
 				+ date_limite + "]";
 	}
 
+	public void setEtat(String etat) {
+		this.etat = etat;
+	}
 	
 }

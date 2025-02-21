@@ -2,7 +2,6 @@ package Vue;
 
 import Ressource.Ressource;
 import Transaction.Emprunt;
-
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -32,7 +31,7 @@ public class IHM {
         System.out.println("4. Afficher la dette");
         System.out.println("5. Effectuer un paiement");
         System.out.println("6. Voir les emprunts en cours");
-        System.out.println("7. Voir l historique des emprunts");
+        System.out.println("7. Voir l'historique des emprunts");
         System.out.println("8. Retour au menu principal");
         System.out.print("Choisissez une action : ");
     }
@@ -42,10 +41,20 @@ public class IHM {
         System.out.println("\n--- MENU EMPLOYE ---");
         System.out.println("1. Ajouter une ressource");
         System.out.println("2. Supprimer une ressource");
-        System.out.println("3. Changer l etat d une ressource");
+        System.out.println("3. Changer l'etat d une ressource");
         System.out.println("4. Afficher les ressources");
         System.out.println("5. Retour au menu principal");
         System.out.print("Choisissez une action : ");
+    }
+    
+ // Menu lors de l'ajout d'une ressource
+    public void affichermenuAjoutRes() {
+    	System.out.println("\n--- AJOUT D'UNE RESSOURCE ---");
+        System.out.println("Choisissez le type de ressource :");
+        System.out.println("1. Ordinateur");
+        System.out.println("2. Tablette Graphique");
+        System.out.println("3. Telephone");
+        System.out.print("Votre choix : ");
     }
 
     // Afficher les ressources disponibles
@@ -65,24 +74,44 @@ public class IHM {
         System.out.println(message);
     }
 
-    // Lire un entier saisi par l utilisateur
+    // Lire un entier saisi par l'utilisateur
     public int lireEntreeEntier() {
         int choix = scanner.nextInt();
         scanner.nextLine();
         return choix;
     }
-
-    // Lire une chaine de caracteres saisie par l utilisateur
-    public String lireEntreeTexte() {
-        return scanner.nextLine();
+    
+    // Lire un double saisi par l'utilisateur
+    public double lireEntreeDouble() {
+    	return scanner.nextDouble();
     }
     
-    // --- Affichage des dettes et paiements ---
+    // Lire un boolean
+    public boolean lireEntreeBoolean() {
+        while (true) {
+            String input = scanner.nextLine().trim().toLowerCase();
+            if (input.equals("true")){
+                return true;
+            } else if (input.equals("false")){
+                return false;
+            } else {
+                System.out.println("Veuillez entrer 'true' ou 'false' !");
+            }
+        }
+    }
+
+    // Lire une chaine de caracteres saisie par l'utilisateur
+    public String lireEntreeTexte() {
+    	String choix = scanner.nextLine();
+        return choix;
+    }
+    
+    // Affichage des dettes et paiements
     public void afficherDette(double dette) {
         System.out.println("Votre dette actuelle est de " + dette + " euros.");
     }
     
-    // --- Affichage des emprunts ---
+    // Affichage des emprunts en cours
     public void afficherEmpruntsActifs(ArrayList<Emprunt> emprunts) {
         if (emprunts.isEmpty()) {
             System.out.println("Vous n'avez aucune ressource empruntee !");
@@ -94,6 +123,7 @@ public class IHM {
         }
     }
     
+    // Affichage des emprunts
     public void afficherHistoriqueEmprunts(ArrayList<Emprunt> historique) {
         if (historique.isEmpty()) {
             System.out.println("Aucun emprunt termine.");
@@ -104,4 +134,10 @@ public class IHM {
             }
         }
     }
+    
+    // Message d'erreur
+    public void erreur() {
+    	System.out.println("Choix invalide.");
+    }
+
 }
