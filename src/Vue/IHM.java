@@ -76,14 +76,26 @@ public class IHM {
 
     // Lire un entier saisi par l'utilisateur
     public int lireEntreeEntier() {
-        int choix = scanner.nextInt();
-        scanner.nextLine();
-        return choix;
+    	while (true) {
+            try {
+                int valeur = Integer.parseInt(scanner.nextLine().trim());
+                return valeur;
+            } catch (NumberFormatException e) {
+                System.out.println("Erreur : Veuillez entrer un nombre entier valide !");
+            }
+        }
     }
     
     // Lire un double saisi par l'utilisateur
     public double lireEntreeDouble() {
-    	return scanner.nextDouble();
+    	while (true) {
+            try {
+                double valeur = Double.parseDouble(scanner.nextLine().trim());
+                return valeur;
+            } catch (NumberFormatException e) {
+                System.out.println("Erreur : Veuillez entrer un nombre décimal valide !");
+            }
+        }
     }
     
     // Lire un boolean

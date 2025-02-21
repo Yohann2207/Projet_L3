@@ -2,7 +2,6 @@ package Personne;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Scanner;
 import Ressource.Ordinateur;
 import Ressource.Ressource;
 import Ressource.Tablette_graphique;

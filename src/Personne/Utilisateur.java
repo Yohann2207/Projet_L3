@@ -7,7 +7,6 @@ import Transaction.Emprunt;
 import Transaction.Paiement;
 import BDD.BDD;
 import java.util.ArrayList;
-import java.util.Scanner;
 
 
 public class Utilisateur extends Personne{
