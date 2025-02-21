@@ -18,7 +18,7 @@ public class Utilisateur extends Personne{
 	private Paiement[] historique_paiements;
 	private ArrayList<Emprunt> empruntsActifs = new ArrayList<>();
 	private ArrayList<Emprunt> historiqueEmprunts = new ArrayList<>();
-    private static final double PENALITE_PAR_JOUR = 5.0; // Pénalité de retard en euros par jour
+    private static final double PENALITE_PAR_JOUR = 5; // Pénalité de retard en euros par jour
 
 	
 	public Utilisateur(String nom, LocalDate date_naissance, String login, String mdp, LocalDate date_inscription) {
