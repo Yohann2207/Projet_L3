@@ -69,10 +69,10 @@ public class Controleur {
             int choix = affichage.lireEntreeEntier();
 
             switch (choix) {
-            case 1: // Afficher les ressources disponibles
+            case 1: // Afficher toutes les ressources
                 affichage.afficherRessources(ressources);
                 break;
-            case 2: // Emprunter
+            case 2: // Emprunter en affichant les ressources disponibles
             	 ArrayList<Ressource> ressourcesDisponibles = new ArrayList<>();
             	 for (Ressource r : ressources) {
                      if (r.isLibre()) {
@@ -94,14 +94,14 @@ public class Controleur {
                 int indexR = affichage.lireEntreeEntier();
                 utilisateur.rendre(indexR);
                 affichage.afficherMessage("Ressource rendue avec succes !");
-                affichage.afficherMessage("Nouvelle dette apres retour : " + utilisateur.getDette() + " euros.");
+                affichage.afficherDette(utilisateur.getDette());
                 break;
             case 4: // Afficher sa dette
                 affichage.afficherDette(utilisateur.getDette());
                 break;
             case 5: // Payer
             	if (utilisateur.getDette() > 0) {
-            		affichage.afficherMessage("Votre dette actuelle est de " + utilisateur.getDette() + " euros.");
+            		affichage.afficherDette(utilisateur.getDette());
             		affichage.afficherMessage("Entrez le montant que vous souhaitez payer : ");
 	                double montant = affichage.lireEntreeDouble();
 	                if (montant > utilisateur.getDette()) {
@@ -144,47 +144,38 @@ public class Controleur {
                 	 affichage.affichermenuAjoutRes();
                 	    int type = affichage.lireEntreeEntier();
 
-                	    affichage.afficherMessage("Marque : ");
-                	    String marque = affichage.lireEntreeTexte();
-                	    affichage.afficherMessage("Autonomie (h) : ");
-                	    int autonomie = affichage.lireEntreeEntier();
-                	    affichage.afficherMessage("Nombre de coeurs : ");
-                	    int nbCoeurs = affichage.lireEntreeEntier();
-                	    affichage.afficherMessage("Memoire (Go) : ");
-                	    int memoire = affichage.lireEntreeEntier();
-                	    affichage.afficherMessage("Resolution ecran (px) : ");
-                	    int resolution = affichage.lireEntreeEntier();
-                	    affichage.afficherMessage("Prix (euros) : ");
-                	    double prix = affichage.lireEntreeDouble();
-                	    affichage.afficherMessage("Duree max d'emprunt (jours) : ");
-                	    int dureeMax = affichage.lireEntreeEntier();
+                	    Object[] infosBase = affichage.saisirInformationsRessource();
 
+                	    String marque = (String) infosBase[0];
+                	    int autonomie = (int) infosBase[1];
+                	    int nbCoeurs = (int) infosBase[2];
+                	    int memoire = (int) infosBase[3];
+                	    int resolution = (int) infosBase[4];
+                	    double prix = (double) infosBase[5];
+                	    int dureeMax = (int) infosBase[6];
+                	    
                 	    Ressource ressource = null;
 
                 	    switch (type) {
                 	        case 1: // Ordinateur
-                	            affichage.afficherMessage("Port USB (true/false) : ");
-                	            boolean portUSB = affichage.lireEntreeBoolean();
-                	            affichage.afficherMessage("Port USB-C (true/false) : ");
-                	            boolean portUSBC = affichage.lireEntreeBoolean();
-                	            affichage.afficherMessage("Port HDMI (true/false) : ");
-                	            boolean portHDMI = affichage.lireEntreeBoolean();
+                	        	Object[] optionsOrdinateur = affichage.saisirOptionsOrdinateur();
+                	            boolean portUSB = (boolean) optionsOrdinateur[0];
+                	            boolean portUSBC = (boolean) optionsOrdinateur[1];
+                	            boolean portHDMI = (boolean) optionsOrdinateur[2];
 
                 	            ressource = employe.AjouterOrdinateur(marque, autonomie, nbCoeurs, memoire, resolution, prix, dureeMax, portUSB, portUSBC, portHDMI);
                 	            break;
 
                 	        case 2: // Tablette Graphique
-                	            affichage.afficherMessage("Logiciel fourni : ");
-                	            String logiciel = affichage.lireEntreeTexte();
-                	            affichage.afficherMessage("Avec un accessoire ? (true/false) : ");
-                	            boolean estAccessoire = affichage.lireEntreeBoolean();
+                	        	Object[] optionsTablette = affichage.saisirOptionsTablette();
+                	            String logiciel = (String) optionsTablette[0];
+                	            boolean estAccessoire = (boolean) optionsTablette[1];
 
                 	            ressource = employe.AjouterTablette(marque, autonomie, nbCoeurs, memoire, resolution, prix, dureeMax, logiciel, estAccessoire);
                 	            break;
 
                 	        case 3: // Téléphone
-                	            affichage.afficherMessage("Numero de telephone (ex: 123456789) : ");
-                	            int numero = affichage.lireEntreeEntier();
+                	        	int numero = affichage.saisirOptionsTelephone();
 
                 	            ressource = employe.AjouterTelephone(marque, autonomie, nbCoeurs, memoire, resolution, prix, dureeMax, numero);
                 	            break;
@@ -223,7 +214,7 @@ public class Controleur {
                         affichage.erreur();
                     }
                     break;
-                case 4: // Afficher les ressources disponibles
+                case 4: // Afficher toutes les ressources 
                     affichage.afficherRessources(ressources);
                     break;
                 case 5: // Retour au menu

@@ -84,7 +84,7 @@ public class Utilisateur extends Personne{
         }
     }
 
-    //Effecteur un paiment
+    //Effectuer un paiment
     public void payer(double montant) {
         if (montant > dette) {
             dette = 0;

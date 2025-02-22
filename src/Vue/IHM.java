@@ -93,7 +93,7 @@ public class IHM {
                 double valeur = Double.parseDouble(scanner.nextLine().trim());
                 return valeur;
             } catch (NumberFormatException e) {
-                System.out.println("Erreur : Veuillez entrer un nombre décimal valide !");
+                System.out.println("Erreur : Veuillez entrer un nombre decimal valide !");
             }
         }
     }
@@ -145,6 +145,54 @@ public class IHM {
                 System.out.println(emp);
             }
         }
+    }
+    
+    // Affichage des informations à saisir pour une ressource
+    public Object[] saisirInformationsRessource() {
+    	System.out.println("Marque : ");
+        String marque = lireEntreeTexte();
+        System.out.println("Autonomie (h) : ");
+        int autonomie = lireEntreeEntier();
+        System.out.println("Nombre de coeurs : ");
+        int nbCoeurs = lireEntreeEntier();
+        System.out.println("Memoire (Go) : ");
+        int memoire = lireEntreeEntier();
+        System.out.println("Resolution ecran (px) : ");
+        int resolution = lireEntreeEntier();
+        System.out.println("Prix (euros) : ");
+        double prix = lireEntreeDouble();
+        System.out.println("Duree max d'emprunt (jours) : ");
+        int dureeMax = lireEntreeEntier();
+
+        return new Object[]{marque, autonomie, nbCoeurs, memoire, resolution, prix, dureeMax};
+    }
+    
+    // Affichage des informations à saisir pour un ordinateur
+    public Object[] saisirOptionsOrdinateur() {
+        System.out.println("Port USB (true/false) : ");
+        boolean portUSB = lireEntreeBoolean();
+        System.out.println("Port USB-C (true/false) : ");
+        boolean portUSBC = lireEntreeBoolean();
+        System.out.println("Port HDMI (true/false) : ");
+        boolean portHDMI = lireEntreeBoolean();
+
+        return new Object[]{portUSB, portUSBC, portHDMI};
+    }
+
+    // Affichage des informations à saisir pour une tablette
+    public Object[] saisirOptionsTablette() {
+        System.out.println("Logiciel fourni : ");
+        String logiciel = lireEntreeTexte();
+        System.out.println("Avec un accessoire ? (true/false) : ");
+        boolean estAccessoire = lireEntreeBoolean();
+
+        return new Object[]{logiciel, estAccessoire};
+    }
+
+    // Affichage des informations à saisir pour un téléphone
+    public int saisirOptionsTelephone() {
+        System.out.println("Numero de telephone : ");
+        return lireEntreeEntier();
     }
     
     // Message d'erreur
