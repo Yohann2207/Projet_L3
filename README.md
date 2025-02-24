@@ -33,10 +33,3 @@ Contributeurs :
 
 MARS Manon
 FABBRI Yohann
-
-
-(Ajouter d'autres noms si nécessaire)
-
-Licence
-
-Ce projet est sous licence (indiquer la licence si applicable).
