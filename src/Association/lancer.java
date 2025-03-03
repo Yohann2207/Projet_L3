@@ -1,8 +1,8 @@
-package Test;
+package Association;
 
 import Controleur.Controleur;
 
-public class Test_association {
+public class lancer {
     public static void main(String[] args) {
     	 Controleur controleur = new Controleur();
          controleur.demarrer();

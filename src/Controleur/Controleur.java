@@ -33,7 +33,7 @@ public class Controleur {
         ressources.add(telephone);
 
         // Test rendu retard
-        LocalDate dateEmprunt = LocalDate.now().minusDays(10); // Emprunt il y a 20 jours
+        LocalDate dateEmprunt = LocalDate.now().minusDays(10); // Emprunt il y a 10 jours
         Emprunt empruntRetard = new Emprunt(utilisateur, telephone, dateEmprunt);
         utilisateur.getEmpruntsActifs().add(empruntRetard); // Ajouter l'emprunt manuellement pour tester un rendu avec retard
     }
