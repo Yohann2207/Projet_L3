@@ -13,7 +13,7 @@ public class BDD {
     }
     public static void ajouter_res() {
         //Requete SQL pour ajouter la ressource (paramètres variables selon notre future BDD) 
-        System.out.println("La ressource a ete ajoute avec succes"); //commentaire piuyr test 
+        System.out.println("La ressource a ete ajoute avec succes"); //commentaire piuyr test dre
     }
 
     public static void supprimer_res(int id) {
