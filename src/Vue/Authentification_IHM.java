@@ -11,10 +11,16 @@ public class Authentification_IHM {
         // Création de la fenêtre principale
         JFrame fenetre = new JFrame();
         fenetre.setTitle("Association de prêts informatiques");
-        fenetre.setSize(400, 250);
+        fenetre.setSize(400, 300);
         fenetre.setLocationRelativeTo(null);
         fenetre.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         fenetre.setLayout(new BorderLayout());
+
+        // Panel principal
+        JPanel panelPrincipal = new JPanel();
+        panelPrincipal.setLayout(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(5, 5, 5, 5);
 
         // Panel pour le titre
         JPanel panelTitre = new JPanel();
@@ -22,67 +28,88 @@ public class Authentification_IHM {
         titre.setFont(new Font("Arial", Font.BOLD, 18));
         panelTitre.add(titre);
 
-        // Panel pour les champs d'entrée
-        JPanel panelForm = new JPanel();
-        panelForm.setLayout(new GridBagLayout());
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(5, 5, 5, 5); // Marges
-
-        // Ajout du champ texte (Nom d'utilisateur)
+        // Champs pour authentification
         JLabel labelUser = new JLabel("Nom d'utilisateur :");
-        JTextField inputUser = new JTextField();
-        inputUser.setPreferredSize(new Dimension(150, 25)); // Réduction de la taille
-
-        // Ajout du champ mot de passe
+        JTextField inputUser = new JTextField(15);
         JLabel labelPwd = new JLabel("Mot de passe :");
-        JPasswordField inputPwd = new JPasswordField();
-        inputPwd.setPreferredSize(new Dimension(150, 25)); // Réduction de la taille
-
-        // Ajout du bouton de validation
+        JPasswordField inputPwd = new JPasswordField(15);
         JButton btnValider = new JButton("Se connecter");
 
-        // Ajout du lien "Mot de passe oublié ?"
-        JLabel linkLabel = new JLabel("<html><u> Pas encore inscrit ? </u></html>"); // Texte souligné
-        linkLabel.setForeground(Color.BLUE); // Couleur bleue pour simuler un lien
+        // Lien "Pas encore inscrit ?"
+        JLabel linkLabel = new JLabel("<html><u> Pas encore inscrit ? </u></html>");
+        linkLabel.setForeground(Color.BLUE);
 
-        // Ajouter un effet au survol et un événement au clic
+        // Placement des composants par défaut
+        gbc.gridx = 0; gbc.gridy = 0;
+        panelPrincipal.add(labelUser, gbc);
+        gbc.gridx = 1;
+        panelPrincipal.add(inputUser, gbc);
+
+        gbc.gridx = 0; gbc.gridy = 1;
+        panelPrincipal.add(labelPwd, gbc);
+        gbc.gridx = 1;
+        panelPrincipal.add(inputPwd, gbc);
+
+        gbc.gridx = 0; gbc.gridy = 2; gbc.gridwidth = 2;
+        panelPrincipal.add(btnValider, gbc);
+
+        gbc.gridy = 3;
+        panelPrincipal.add(linkLabel, gbc);
+
+        // Action au clic sur "Pas encore inscrit ?"
         linkLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
-                linkLabel.setCursor(new Cursor(Cursor.HAND_CURSOR)); // Change le curseur en main
+                linkLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
             }
 
             @Override
             public void mouseClicked(MouseEvent e) {
-                JOptionPane.showMessageDialog(fenetre, "YES ! ");
-                // Ici, on pourrait ouvrir un navigateur : Desktop.getDesktop().browse(new URI("URL"));
+                // Nettoyage du panel
+                panelPrincipal.removeAll();
+
+                // Changement du titre
+                titre.setText("Inscription");
+
+                // Ajout du champ Nom
+                JLabel labelNom = new JLabel("AAAAAAAAA :");
+                JTextField inputNom = new JTextField(15);
+
+                // Mise à jour du bouton
+                btnValider.setText("S'inscrire");
+
+                // Placement des nouveaux composants
+                gbc.gridx = 0; gbc.gridy = 0;
+                panelPrincipal.add(labelNom, gbc);
+                gbc.gridx = 1;
+                panelPrincipal.add(inputNom, gbc);
+
+                gbc.gridx = 0; gbc.gridy = 1;
+                panelPrincipal.add(labelUser, gbc);
+                gbc.gridx = 1;
+                panelPrincipal.add(inputUser, gbc);
+
+                gbc.gridx = 0; gbc.gridy = 2;
+                panelPrincipal.add(labelPwd, gbc);
+                gbc.gridx = 1;
+                panelPrincipal.add(inputPwd, gbc);
+
+                gbc.gridx = 0; gbc.gridy = 3; gbc.gridwidth = 2;
+                panelPrincipal.add(btnValider, gbc);
+
+                // Rafraîchir l'affichage
+                panelPrincipal.revalidate();
+                panelPrincipal.repaint();
             }
         });
 
-        // Placement des composants avec GridBagConstraints
-        gbc.gridx = 0; gbc.gridy = 0;
-        panelForm.add(labelUser, gbc);
-        gbc.gridx = 1;
-        panelForm.add(inputUser, gbc);
-
-        gbc.gridx = 0; gbc.gridy = 1;
-        panelForm.add(labelPwd, gbc);
-        gbc.gridx = 1;
-        panelForm.add(inputPwd, gbc);
-
-        gbc.gridx = 0; gbc.gridy = 2; gbc.gridwidth = 2;
-        panelForm.add(btnValider, gbc);
-
-        gbc.gridy = 3; // Ajout du lien en dessous du bouton
-        panelForm.add(linkLabel, gbc);
-
         // Ajout des panels à la fenêtre
         fenetre.add(panelTitre, BorderLayout.NORTH);
-        fenetre.add(panelForm, BorderLayout.CENTER);
+        fenetre.add(panelPrincipal, BorderLayout.CENTER);
 
         // Rendre la fenêtre visible
         fenetre.setVisible(true);
-        
+
         //cd /Users/manonmars/git/Projet_L3 
         //javac -d bin src/Vue/TEST_IHM_VRAC.java
         //java -cp bin Vue.TEST_IHM_VRAC
