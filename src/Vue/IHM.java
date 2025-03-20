@@ -32,7 +32,7 @@ public class IHM {
         System.out.println("5. Effectuer un paiement");
         System.out.println("6. Voir les emprunts en cours");
         System.out.println("7. Voir l'historique des emprunts");
-        System.out.println("8. Retour au menu principal");
+        System.out.println("8. Se deconnecter");
         System.out.print("Choisissez une action : ");
     }
 
@@ -43,7 +43,7 @@ public class IHM {
         System.out.println("2. Supprimer une ressource");
         System.out.println("3. Changer l'etat d une ressource");
         System.out.println("4. Afficher les ressources");
-        System.out.println("5. Retour au menu principal");
+        System.out.println("5. Se deconnecter");
         System.out.print("Choisissez une action : ");
     }
     

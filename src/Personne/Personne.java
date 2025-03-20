@@ -1,6 +1,7 @@
 package Personne;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 
 public class Personne {
 	
@@ -52,5 +53,21 @@ public class Personne {
 		return "Personne [nom=" + nom + ", date_naissance=" + date_naissance + ", login=" + login + ", mdp=" + mdp
 				+ "]";
 	}
+	
+	public static Personne authentifier(String login, String motDePasse, ArrayList<Utilisateur> utilisateurs, ArrayList<Employe> employes) {
+        for (Utilisateur u : utilisateurs) {
+            if (u.getLogin().equals(login) && u.getMdp().equals(motDePasse)) {
+                return u;
+            }
+        }
+
+        for (Employe e : employes) {
+            if (e.getLogin().equals(login) && e.getMdp().equals(motDePasse)) {
+                return e;
+            }
+        }
+
+        return null;
+    }
 
 }

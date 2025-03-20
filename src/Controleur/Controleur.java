@@ -1,6 +1,7 @@
 package Controleur;
 
 import Personne.Employe;
+import Personne.Personne;
 import Personne.Utilisateur;
 import Ressource.Ressource;
 import Ressource.Tablette_graphique;
@@ -17,11 +18,21 @@ public class Controleur {
     private Utilisateur utilisateur;
     private Employe employe;
     private ArrayList<Ressource> ressources;
+    private ArrayList<Utilisateur> utilisateurs;
+    private ArrayList<Employe> employes;
 
     public Controleur() {
         this.affichage = new IHM();
+        
+        this.utilisateurs = new ArrayList<>();
+        this.employes = new ArrayList<>();
+        
+     // Liste des personnes
         this.utilisateur = new Utilisateur("Alice", LocalDate.of(2000, 3, 22), "aliceU", "pass456", LocalDate.now());
         this.employe = new Employe("Martin", LocalDate.of(1985, 6, 15), "martinE", "pass123", 2500, 500, "Admin");
+        utilisateurs.add(utilisateur);
+        employes.add(employe);
+        
         this.ressources = new ArrayList<>();
         
      // Liste des ressources
@@ -38,26 +49,37 @@ public class Controleur {
         utilisateur.getEmpruntsActifs().add(empruntRetard); // Ajouter l'emprunt manuellement pour tester un rendu avec retard
     }
 
-    // Demarrer l'application
+ // Demarrer l'application
     public void demarrer() {
-        boolean running = true;
-        while (running) {
-            affichage.afficherMenuPrincipal();
-            int role = affichage.lireEntreeEntier();
+        affichage.afficherMessage("=== Bienvenue dans l'application ===");
 
-            switch (role) {
-                case 1: // Action de l'utilisateur
-                    gererUtilisateur();
-                    break;
-                case 2: // Action de l'employe
-                    gererEmploye();
-                    break;
-                case 3: // Fin du programme
-                    running = false;
-                    break;
-                default:
-                    affichage.erreur();
+        while (true) {
+
+            Personne personne = null;
+
+            while (personne == null) {
+                affichage.afficherMessage("Login : ");
+                String login = affichage.lireEntreeTexte();
+
+                affichage.afficherMessage("Mot de passe : ");
+                String mdp = affichage.lireEntreeTexte();
+
+                personne = Personne.authentifier(login, mdp, utilisateurs, employes);
+
+                if (personne == null) {
+                    affichage.afficherMessage("Login ou mot de passe incorrect. Veuillez reessayer.\n");
+                } else {
+                    affichage.afficherMessage("Connexion reussie ! Bienvenue " + personne.getNom() + " !\n");
+                }
             }
+
+            if (personne instanceof Utilisateur) {
+                gererUtilisateur();
+            } else if (personne instanceof Employe) {
+                gererEmploye();
+            }
+
+            affichage.afficherMessage("Deconnexion en cours...\n");
         }
     }
 
@@ -123,7 +145,7 @@ public class Controleur {
             case 7: // Afficher la liste des emprunts effectuer
                 affichage.afficherHistoriqueEmprunts(utilisateur.getHistoriqueEmprunts());
                 break;
-            case 8: // Retour au menu
+            case 8: // Se déconnecter
                 userMenu = false;
                 break;
             default: // Choix invalide
@@ -217,7 +239,7 @@ public class Controleur {
                 case 4: // Afficher toutes les ressources 
                     affichage.afficherRessources(ressources);
                     break;
-                case 5: // Retour au menu
+                case 5: // Se déconnecter
                     employeMenu = false;
                     break;
                 default: // Choix invalide
