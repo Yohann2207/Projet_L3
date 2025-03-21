@@ -2,8 +2,13 @@ package Vue;
 
 import Ressource.Ressource;
 import Transaction.Emprunt;
+
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Scanner;
+
+import Personne.Employe;
+import Personne.Utilisateur;
 
 public class IHM {
     
@@ -36,16 +41,22 @@ public class IHM {
         System.out.print("Choisissez une action : ");
     }
 
-    // Affichage du menu employe
     public void afficherMenuEmploye() {
-        System.out.println("\n--- MENU EMPLOYE ---");
-        System.out.println("1. Ajouter une ressource");
-        System.out.println("2. Supprimer une ressource");
-        System.out.println("3. Changer l'etat d une ressource");
-        System.out.println("4. Afficher les ressources");
-        System.out.println("5. Se deconnecter");
-        System.out.print("Choisissez une action : ");
+        afficherMessage("\n--- MENU EMPLOYE ---");
+        afficherMessage("1. Ajouter une ressource");
+        afficherMessage("2. Supprimer une ressource");
+        afficherMessage("3. Changer l'etat d'une ressource");
+        afficherMessage("4. Afficher les ressources");
+        afficherMessage("5. Ajouter un utilisateur");
+        afficherMessage("6. Supprimer un utilisateur");
+        afficherMessage("7. Ajouter un employe");
+        afficherMessage("8. Supprimer un employe");
+        afficherMessage("9. Afficher les utilisateurs");
+        afficherMessage("10. Afficher les employes");
+        afficherMessage("11. Se deconnecter");
+        afficherMessage("Choisissez une action : ");
     }
+
     
  // Menu lors de l'ajout d'une ressource
     public void affichermenuAjoutRes() {
@@ -149,6 +160,8 @@ public class IHM {
     
     // Affichage des informations à saisir pour une ressource
     public Object[] saisirInformationsRessource() {
+    	System.out.println("Nom : ");
+        String nom = lireEntreeTexte();
     	System.out.println("Marque : ");
         String marque = lireEntreeTexte();
         System.out.println("Autonomie (h) : ");
@@ -164,7 +177,7 @@ public class IHM {
         System.out.println("Duree max d'emprunt (jours) : ");
         int dureeMax = lireEntreeEntier();
 
-        return new Object[]{marque, autonomie, nbCoeurs, memoire, resolution, prix, dureeMax};
+        return new Object[]{nom, marque, autonomie, nbCoeurs, memoire, resolution, prix, dureeMax};
     }
     
     // Affichage des informations à saisir pour un ordinateur
@@ -193,6 +206,60 @@ public class IHM {
     public int saisirOptionsTelephone() {
         System.out.println("Numero de telephone : ");
         return lireEntreeEntier();
+    }
+    
+    public Utilisateur saisirNouvelUtilisateur() {
+        afficherMessage("Nom : ");
+        String nom = lireEntreeTexte();
+        afficherMessage("Date de naissance (YYYY-MM-DD) : ");
+        LocalDate dateNaissance = LocalDate.parse(lireEntreeTexte());
+        afficherMessage("Login : ");
+        String login = lireEntreeTexte();
+        afficherMessage("Mot de passe : ");
+        String mdp = lireEntreeTexte();
+        LocalDate dateInscription = LocalDate.now();
+
+        return new Utilisateur(nom, dateNaissance, login, mdp, dateInscription);
+    }
+    
+    public Employe saisirNouvelEmploye() {
+        afficherMessage("Nom : ");
+        String nom = lireEntreeTexte();
+        afficherMessage("Date de naissance (YYYY-MM-DD) : ");
+        LocalDate dateNaissance = LocalDate.parse(lireEntreeTexte());
+        afficherMessage("Login : ");
+        String login = lireEntreeTexte();
+        afficherMessage("Mot de passe : ");
+        String mdp = lireEntreeTexte();
+        afficherMessage("Salaire : ");
+        double salaire = lireEntreeDouble();
+        double prime = 0;
+        afficherMessage("Poste : ");
+        String poste = lireEntreeTexte();
+
+        return new Employe(nom, dateNaissance, login, mdp, salaire, prime, poste);
+    }
+    
+    public void afficherListeUtilisateurs(ArrayList<Utilisateur> utilisateurs) {
+        if (utilisateurs.isEmpty()) {
+            afficherMessage("Aucun utilisateur enregistre.");
+        } else {
+            afficherMessage("\n--- LISTE DES UTILISATEURS ---");
+            for (Utilisateur u : utilisateurs) {
+                afficherMessage(u.toString());
+            }
+        }
+    }
+    
+    public void afficherListeEmployes(ArrayList<Employe> employes) {
+        if (employes.isEmpty()) {
+            afficherMessage("Aucun employe enregistre.");
+        } else {
+            afficherMessage("\n--- LISTE DES EMPLOYES ---");
+            for (Employe e : employes) {
+                afficherMessage(e.toString());
+            }
+        }
     }
     
     // Message d'erreur

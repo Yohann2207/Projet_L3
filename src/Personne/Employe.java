@@ -22,23 +22,20 @@ public class Employe extends Personne{
 	}
 	
 	// Ajouter un ordinateur
-	public Ressource AjouterOrdinateur(String marque, int autonomie, int nbCoeurs, int memoire, int resolution, double prix, int dureeMax, boolean portUSB, boolean portUSBC, boolean portHDMI) {
-		Ressource ordinateur = new Ordinateur(marque, autonomie, nbCoeurs, memoire, resolution, true, prix, dureeMax, portUSB, portUSBC, portHDMI);
-		BDD.ajouter_res();
+	public Ressource AjouterOrdinateur(int id, String nom,String marque, int autonomie, int nbCoeurs, int memoire, int resolution, double prix, int dureeMax, boolean portUSB, boolean portUSBC, boolean portHDMI) {
+		Ressource ordinateur = new Ordinateur(id, nom, marque, autonomie, nbCoeurs, memoire, resolution, true, prix, dureeMax, portUSB, portUSBC, portHDMI);
 		return ordinateur;
 	}
 
 	// Ajouter une tablette
-	public Ressource AjouterTablette(String marque, int autonomie, int nbCoeurs, int memoire, int resolution, double prix, int dureeMax, String logiciel, boolean estAccessoire) {
-		Ressource tablette = new Tablette_graphique(marque, autonomie, nbCoeurs, memoire, resolution, true, prix, dureeMax, logiciel, estAccessoire);
-		BDD.ajouter_res();
+	public Ressource AjouterTablette(int id, String nom, String marque, int autonomie, int nbCoeurs, int memoire, int resolution, double prix, int dureeMax, String logiciel, boolean estAccessoire) {
+		Ressource tablette = new Tablette_graphique(id, nom, marque, autonomie, nbCoeurs, memoire, resolution, true, prix, dureeMax, logiciel, estAccessoire);
 		return tablette;
 	}
 
 	// Ajouter un telephone
-	public Ressource AjouterTelephone(String marque, int autonomie, int nbCoeurs, int memoire, int resolution, double prix, int dureeMax, int numero) {
-		Ressource telephone = new Telephone(marque, autonomie, nbCoeurs, memoire, resolution, true, prix, dureeMax, numero);
-		BDD.ajouter_res();
+	public Ressource AjouterTelephone(int id, String nom, String marque, int autonomie, int nbCoeurs, int memoire, int resolution, double prix, int dureeMax, int numero) {
+		Ressource telephone = new Telephone(id, nom, marque, autonomie, nbCoeurs, memoire, resolution, true, prix, dureeMax, numero);
 		return telephone;
 	}
 	
@@ -62,4 +59,20 @@ public class Employe extends Personne{
         return false;
     }
     
+    public double getSalaire() {
+		return salaire;
+	}
+
+	public double getPrime() {
+		return prime;
+	}
+
+	public String getRole() {
+		return role;
+	}
+
+	@Override
+	public String toString() {
+		return "Nom : " + getNom() + " | Login : " + getLogin() + " | Poste : " + getRole() + " | Salaire : " + getSalaire() + " euros";	
+	}
 }

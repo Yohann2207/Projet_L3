@@ -7,6 +7,7 @@ import Transaction.Emprunt;
 import Transaction.Paiement;
 import BDD.BDD;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 
 public class Utilisateur extends Personne{
@@ -49,8 +50,8 @@ public class Utilisateur extends Personne{
 		return is_premium; 
 	}
 	
-	public void devenir_premium() {
-		is_premium=true; 
+	public void setIs_premium(boolean is_premium) {
+		this.is_premium = is_premium;
 	}
 	
 	
@@ -105,4 +106,10 @@ public class Utilisateur extends Personne{
 	public void ajouterHistorique(Emprunt emp) {
 	    historiqueEmprunts.add(emp);
 	}
+
+	@Override
+	public String toString() {
+	    return "Nom : " + getNom() + " | Login : " + getLogin() + " | Dette : " + getDette() + " euros" + " | Premium : " + (getIs_premium() ? "Oui" : "Non");
+	}
+
 }
