@@ -50,9 +50,9 @@ public class BDD {
 
             int rows = pstmt.executeUpdate();
             if (rows > 0) {
-            	ResultSet rs = pstmt.getGeneratedKeys();
-                if (rs.next()) {
-                    int idRes = rs.getInt(1);
+            	ResultSet rs = pstmt.getGeneratedKeys();	//Récupère le ou les identifiants auto-générés par l'insertion.
+                if (rs.next()) {	//On vérifie s’il y a au moins une clé générée à récupérer
+                    int idRes = rs.getInt(1);	//Récupère la valeur de la première colonne
                     return idRes;
                 }
             }
@@ -64,7 +64,7 @@ public class BDD {
         return -1;
     }
 
-    public static boolean supprimer_res(int id) {
+    public static void supprimer_res(int id) {
         //Requete SQL pour supprimer la ressource via son id
     	String sql = "DELETE FROM Ressource WHERE id_res = ?";
 
@@ -73,26 +73,25 @@ public class BDD {
 
             pstmt.setInt(1, id);
 
-            int rows = pstmt.executeUpdate();
-            return rows > 0;
+            pstmt.executeUpdate();
         
         } catch (SQLException e) {
-            return false;
+        	
         }
     }
 
-    public static void ajouter_uti(String nom, String login, String mdp) {
-        //Requete SQL pour ajouter l'utilisateur (paramètres variables selon notre future BDD) 
-        String sql = "INSERT INTO utilisateur (nom_uti, login_uti, mdp_uti) VALUES (?, ?, ?)";
+    public static void ajouter_uti(String nom, LocalDate date_naissance, String login, String mdp) {
+        String sql = "INSERT INTO utilisateur (nom_uti, date_naissance_uti, login_uti, mdp_uti) VALUES (?, ?, ?, ?)";
 
         try (Connection conn = Connexion_BDD.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
-        	
-            String mdpHash = HashUtils.hasherMotDePasse(mdp);
-        	
+
+            String mdpHash = Hashage.hashermdp(mdp);
+
             pstmt.setString(1, nom);
-            pstmt.setString(2, login);
-            pstmt.setString(3, mdpHash);
+            pstmt.setDate(2, java.sql.Date.valueOf(date_naissance));  // conversion LocalDate -> java.sql.Date
+            pstmt.setString(3, login);
+            pstmt.setString(4, mdpHash);
 
             pstmt.executeUpdate();
 
@@ -117,19 +116,20 @@ public class BDD {
         }
     }
     
-    public static void ajouterEmploye(String nom, String login, String mdp, double salaire, String poste) {
-        String sql = "INSERT INTO Employe (nom_employe, login_employe, mdp_employe, salaire, poste) VALUES (?, ?, ?, ?, ?)";
+    public static void ajouter_employe(String nom, LocalDate date_naissance, String login, String mdp, double salaire, String poste) {
+        String sql = "INSERT INTO Employe (nom_employe, date_naissance_employe, login_employe, mdp_employe, salaire, poste) VALUES (?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = Connexion_BDD.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
         	
-            String mdpHash = HashUtils.hasherMotDePasse(mdp);
+            String mdpHash = Hashage.hashermdp(mdp);
         	
             pstmt.setString(1, nom);
-            pstmt.setString(2, login);
-            pstmt.setString(3, mdpHash);
-            pstmt.setDouble(4, salaire);
-            pstmt.setString(5, poste);
+            pstmt.setDate(2, java.sql.Date.valueOf(date_naissance));  // conversion LocalDate -> java.sql.Date
+            pstmt.setString(3, login);
+            pstmt.setString(4, mdpHash);
+            pstmt.setDouble(5, salaire);
+            pstmt.setString(6, poste);
 
             pstmt.executeUpdate();
 
@@ -138,7 +138,7 @@ public class BDD {
         }
     }
     
-    public static void supprimerEmploye(String login) {
+    public static void supprimer_employe(String login) {
         String sql = "DELETE FROM Employe WHERE login_employe = ?";
 
         try (Connection conn = Connexion_BDD.getConnection();

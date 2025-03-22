@@ -2,7 +2,7 @@ package Personne;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import BDD.HashUtils;
+import BDD.Hashage;
 
 public class Personne {
 	
@@ -57,7 +57,7 @@ public class Personne {
 	
 	public static Personne authentifier(String login, String motDePasse, ArrayList<Utilisateur> utilisateurs, ArrayList<Employe> employes) {
 		
-	    String mdpHash = HashUtils.hasherMotDePasse(motDePasse);
+	    String mdpHash = Hashage.hashermdp(motDePasse);
 		
         for (Utilisateur u : utilisateurs) {
             if (u.getLogin().equals(login) && u.getMdp().equals(mdpHash)) {

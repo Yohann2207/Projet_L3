@@ -41,20 +41,21 @@ public class IHM {
         System.out.print("Choisissez une action : ");
     }
 
+    // Affichage du menu employe
     public void afficherMenuEmploye() {
-        afficherMessage("\n--- MENU EMPLOYE ---");
-        afficherMessage("1. Ajouter une ressource");
-        afficherMessage("2. Supprimer une ressource");
-        afficherMessage("3. Changer l'etat d'une ressource");
-        afficherMessage("4. Afficher les ressources");
-        afficherMessage("5. Ajouter un utilisateur");
-        afficherMessage("6. Supprimer un utilisateur");
-        afficherMessage("7. Ajouter un employe");
-        afficherMessage("8. Supprimer un employe");
-        afficherMessage("9. Afficher les utilisateurs");
-        afficherMessage("10. Afficher les employes");
-        afficherMessage("11. Se deconnecter");
-        afficherMessage("Choisissez une action : ");
+    	System.out.println("\n--- MENU EMPLOYE ---");
+    	System.out.println("1. Ajouter une ressource");
+    	System.out.println("2. Supprimer une ressource");
+    	System.out.println("3. Changer l'etat d'une ressource");
+    	System.out.println("4. Afficher les ressources");
+    	System.out.println("5. Ajouter un utilisateur");
+    	System.out.println("6. Supprimer un utilisateur");
+    	System.out.println("7. Ajouter un employe");
+    	System.out.println("8. Supprimer un employe");
+    	System.out.println("9. Afficher les utilisateurs");
+    	System.out.println("10. Afficher les employes");
+    	System.out.println("11. Se deconnecter");
+    	System.out.println("Choisissez une action : ");
     }
 
     
@@ -127,6 +128,24 @@ public class IHM {
     public String lireEntreeTexte() {
     	String choix = scanner.nextLine();
         return choix;
+    }
+    
+    public LocalDate lireDate() {
+        LocalDate date = null;
+        boolean saisieCorrecte = false;
+
+        while (!saisieCorrecte) {
+            String dateStr = lireEntreeTexte();
+
+            try {
+                date = LocalDate.parse(dateStr);
+                saisieCorrecte = true;  
+            } catch (Exception e) {
+            	System.out.println("Format invalide ! Veuillez entrer la date au format AAAA-MM-JJ.\n");
+            }
+        }
+
+        return date;
     }
     
     // Affichage des dettes et paiements
@@ -209,13 +228,13 @@ public class IHM {
     }
     
     public Utilisateur saisirNouvelUtilisateur() {
-        afficherMessage("Nom : ");
+    	System.out.println("Nom : ");
         String nom = lireEntreeTexte();
-        afficherMessage("Date de naissance (YYYY-MM-DD) : ");
-        LocalDate dateNaissance = LocalDate.parse(lireEntreeTexte());
-        afficherMessage("Login : ");
+        System.out.println("Date de naissance (YYYY-MM-DD) : ");
+        LocalDate dateNaissance = lireDate();
+        System.out.println("Login : ");
         String login = lireEntreeTexte();
-        afficherMessage("Mot de passe : ");
+        System.out.println("Mot de passe : ");
         String mdp = lireEntreeTexte();
         LocalDate dateInscription = LocalDate.now();
 
@@ -223,18 +242,18 @@ public class IHM {
     }
     
     public Employe saisirNouvelEmploye() {
-        afficherMessage("Nom : ");
+    	System.out.println("Nom : ");
         String nom = lireEntreeTexte();
-        afficherMessage("Date de naissance (YYYY-MM-DD) : ");
-        LocalDate dateNaissance = LocalDate.parse(lireEntreeTexte());
-        afficherMessage("Login : ");
+        System.out.println("Date de naissance (YYYY-MM-DD) : ");
+        LocalDate dateNaissance = lireDate();
+        System.out.println("Login : ");
         String login = lireEntreeTexte();
-        afficherMessage("Mot de passe : ");
+        System.out.println("Mot de passe : ");
         String mdp = lireEntreeTexte();
-        afficherMessage("Salaire : ");
+        System.out.println("Salaire : ");
         double salaire = lireEntreeDouble();
         double prime = 0;
-        afficherMessage("Poste : ");
+        System.out.println("Poste : ");
         String poste = lireEntreeTexte();
 
         return new Employe(nom, dateNaissance, login, mdp, salaire, prime, poste);
@@ -242,22 +261,22 @@ public class IHM {
     
     public void afficherListeUtilisateurs(ArrayList<Utilisateur> utilisateurs) {
         if (utilisateurs.isEmpty()) {
-            afficherMessage("Aucun utilisateur enregistre.");
+        	System.out.println("Aucun utilisateur enregistre.");
         } else {
-            afficherMessage("\n--- LISTE DES UTILISATEURS ---");
+        	System.out.println("\n--- LISTE DES UTILISATEURS ---");
             for (Utilisateur u : utilisateurs) {
-                afficherMessage(u.toString());
+            	System.out.println(u.toString());
             }
         }
     }
     
     public void afficherListeEmployes(ArrayList<Employe> employes) {
         if (employes.isEmpty()) {
-            afficherMessage("Aucun employe enregistre.");
+        	System.out.println("Aucun employe enregistre.");
         } else {
-            afficherMessage("\n--- LISTE DES EMPLOYES ---");
+        	System.out.println("\n--- LISTE DES EMPLOYES ---");
             for (Employe e : employes) {
-                afficherMessage(e.toString());
+            	System.out.println(e.toString());
             }
         }
     }

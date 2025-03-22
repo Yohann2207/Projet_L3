@@ -5,9 +5,9 @@ import java.security.NoSuchAlgorithmException;
 import java.nio.charset.StandardCharsets;
 import java.math.BigInteger;
 
-public class HashUtils {
+public class Hashage {
     
-    public static String hasherMotDePasse(String motDePasse) {
+    public static String hashermdp(String motDePasse) {
         try {
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
             byte[] hash = digest.digest(motDePasse.getBytes(StandardCharsets.UTF_8));
