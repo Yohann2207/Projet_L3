@@ -27,13 +27,10 @@ public class BDD {
             pstmt.setString(1, nv_etat);
             pstmt.setInt(2, id_res);
 
-            int rows = pstmt.executeUpdate();
-            if (rows > 0) {
-                System.out.println("La ressource a ete ajoutee avec succes a la BDD");
-            }
+            pstmt.executeUpdate();
             
         } catch (SQLException e) {
-            System.out.println("Erreur lors de l'ajout de la ressource : " + e.getMessage());
+          
         }
     }
     
@@ -58,17 +55,16 @@ public class BDD {
                     int idRes = rs.getInt(1);
                     return idRes;
                 }
-                System.out.println("La ressource a ete ajoutee avec succes a la BDD");
             }
 
         } catch (SQLException e) {
-            System.out.println("Erreur lors de l'ajout de la ressource : " + e.getMessage());
+        	
         }
         
         return -1;
     }
 
-    public static void supprimer_res(int id) {
+    public static boolean supprimer_res(int id) {
         //Requete SQL pour supprimer la ressource via son id
     	String sql = "DELETE FROM Ressource WHERE id_res = ?";
 
@@ -78,12 +74,10 @@ public class BDD {
             pstmt.setInt(1, id);
 
             int rows = pstmt.executeUpdate();
-            if (rows > 0) {
-                System.out.println("La ressource a ete ajoutee avec succes a la BDD");
-            }
-
+            return rows > 0;
+        
         } catch (SQLException e) {
-            System.out.println("Erreur lors de l'ajout de la ressource : " + e.getMessage());
+            return false;
         }
     }
 
@@ -100,13 +94,10 @@ public class BDD {
             pstmt.setString(2, login);
             pstmt.setString(3, mdpHash);
 
-            int rows = pstmt.executeUpdate();
-            if (rows > 0) {
-                System.out.println("L'utilisateur a ete ajoute avec succes a la BDD");
-            }
+            pstmt.executeUpdate();
 
         } catch (SQLException e) {
-            System.out.println("Erreur ajout utilisateur : " + e.getMessage());
+        	
         }
     }
 
@@ -119,15 +110,10 @@ public class BDD {
 
             pstmt.setString(1, login);
 
-            int rows = pstmt.executeUpdate();
-            if (rows > 0) {
-                System.out.println("L'utilisateur a ete supprime de la BDD avec succes");
-            } else {
-                System.out.println("Aucun utilisateur trouvé avec ce login.");
-            }
+            pstmt.executeUpdate();
 
         } catch (SQLException e) {
-            System.out.println("Erreur suppression utilisateur : " + e.getMessage());
+        	
         }
     }
     
@@ -145,13 +131,10 @@ public class BDD {
             pstmt.setDouble(4, salaire);
             pstmt.setString(5, poste);
 
-            int rows = pstmt.executeUpdate();
-            if (rows > 0) {
-                System.out.println("L'employe a ete ajoute avec succes a la BDD");
-            }
+            pstmt.executeUpdate();
 
         } catch (SQLException e) {
-            System.out.println("Erreur ajout employe : " + e.getMessage());
+        	
         }
     }
     
@@ -163,15 +146,10 @@ public class BDD {
 
             pstmt.setString(1, login);
 
-            int rows = pstmt.executeUpdate();
-            if (rows > 0) {
-                System.out.println("Employe supprime de la BDD avec succes !");
-            } else {
-                System.out.println("Aucun employe trouve avec ce login.");
-            }
+            pstmt.executeUpdate();
 
         } catch (SQLException e) {
-            System.out.println("Erreur suppression employe : " + e.getMessage());
+        	
         }
     }
 
@@ -219,7 +197,7 @@ public class BDD {
             }
 
         } catch (SQLException e) {
-            System.out.println("Erreur lors de la recuperation des utilisateurs : " + e.getMessage());
+        	
         }
 
         return utilisateurs;
@@ -249,7 +227,7 @@ public class BDD {
             }
 
         } catch (SQLException e) {
-            System.out.println("Erreur lors de la recuperation des employes : " + e.getMessage());
+        	
         }
 
         return employes;
@@ -308,7 +286,7 @@ public class BDD {
             }
 
         } catch (SQLException e) {
-            System.out.println("Erreur lors de la récupération des ressources : " + e.getMessage());
+        	
         }
 
         return ressources;

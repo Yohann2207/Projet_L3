@@ -25,7 +25,7 @@ public class Ressource {
         this.libre = libre;
         this.prix = prix;
         this.duree_max = duree_max;
-        this.etat="neuf";
+        this.etat="Neuf";
     }
 
     public int getDuree_max() {

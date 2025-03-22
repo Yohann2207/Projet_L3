@@ -41,22 +41,84 @@ public class Employe extends Personne{
 	
     // Supprimer une ressource
     public boolean supprimerRessource(ArrayList<Ressource> ressources, int index) {
-        if (index >= 0 && index < ressources.size()) {
-            ressources.remove(index);
-            BDD.supprimer_res(index);
-            return true;
+        // Supprimer dans la liste mémoire
+        boolean ressourceTrouvee = ressources.removeIf(r -> r.getId() == index);
+
+        if (ressourceTrouvee) {
+            boolean deleted = BDD.supprimer_res(index);
+
+            if (deleted) {
+                return true;
+            } else {
+                return false;
+            }
         }
         return false;
     }
 
     // Changer l'état d'une ressource
     public boolean changerEtatRessource(ArrayList<Ressource> ressources, int index, String nouvelEtat) {
-        if (index >= 0 && index < ressources.size()) {
-            ressources.get(index).setEtat(nouvelEtat);
+    	// Recherche de la ressource
+        Ressource ressourceAModifier = ressources.stream().filter(r -> r.getId() == index).findFirst().orElse(null);
+
+        if (ressourceAModifier != null) {
+            ressourceAModifier.setEtat(nouvelEtat);
             BDD.changer_etat_res(nouvelEtat, index);
             return true;
         }
+        return false; 
+    }
+    
+    public boolean ajouterUtilisateur(ArrayList<Utilisateur> utilisateurs, Utilisateur utilisateur) {
+        // Vérifie si le login existe déjà dans la liste des utilisateurs
+        boolean existeDejaU = utilisateurs.stream().anyMatch(u -> u.getLogin().equalsIgnoreCase(utilisateur.getLogin()));
+
+        if (existeDejaU) {
+            return false; 
+        }
+        
+        utilisateurs.add(utilisateur);
+        BDD.ajouter_uti(utilisateur.getNom(), utilisateur.getLogin(), utilisateur.getMdp());
+
+        return true;
+    }
+    
+    public boolean supprimerUtilisateur(ArrayList<Utilisateur> utilisateurs, String login) {
+        // Supprimer dans la liste mémoire
+        boolean removed = utilisateurs.removeIf(user -> user.getLogin().equals(login));
+
+        if (removed) {
+            BDD.supprimer_uti(login);
+            return true;
+        }
+
         return false;
+    }
+    
+    public boolean ajouterEmploye(ArrayList<Employe> employes, Employe nouvelEmploye) {
+        // Vérifier si le login existe déjà
+        boolean existeDejaE = employes.stream().anyMatch(emp -> emp.getLogin().equalsIgnoreCase(nouvelEmploye.getLogin()));
+
+        if (existeDejaE) {
+            return false;  
+        }
+
+        employes.add(nouvelEmploye);
+        BDD.ajouterEmploye(nouvelEmploye.getNom(), nouvelEmploye.getLogin(), nouvelEmploye.getMdp(), nouvelEmploye.getSalaire(), nouvelEmploye.getRole());
+
+        return true;
+    }
+    
+    public boolean supprimerEmploye(ArrayList<Employe> employes, String login) {
+        // Supprimer de la liste mémoire
+        boolean removed = employes.removeIf(emp -> emp.getLogin().equalsIgnoreCase(login));
+
+        if (removed) {
+            BDD.supprimerEmploye(login);
+            return true;
+        }
+
+        return false; 
     }
     
     public double getSalaire() {
