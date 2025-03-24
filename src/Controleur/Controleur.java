@@ -9,6 +9,9 @@ import Ressource.Telephone;
 import Transaction.Emprunt;
 import Ressource.Ordinateur;
 import Vue.IHM;
+import Vue.MenuEmploye_IHM;
+import Vue.MenuUtilisateur_IHM;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import BDD.BDD;
@@ -49,7 +52,7 @@ public class Controleur {
         //utilisateur.getEmpruntsActifs().add(empruntRetard); // Ajouter l'emprunt manuellement pour tester un rendu avec retard
     }
 
- // Demarrer l'application
+ // Demarrer l'application (console)
     public void demarrer() {
         affichage.afficherMessage("=== Bienvenue dans l'application ===");
 
@@ -85,6 +88,32 @@ public class Controleur {
             
             this.utilisateur = null;
             this.employe = null;
+        }
+    }
+    
+    // Demarrer l'application avec l'IHM
+    public boolean authentifier(String login, String mdp) {
+        Personne personne = Personne.authentifier(login, mdp, utilisateurs, employes);
+
+        if (personne == null) {
+            return false;
+        }
+
+        if (personne instanceof Utilisateur) {
+            utilisateur = (Utilisateur) personne;
+        } else if (personne instanceof Employe) {
+            employe = (Employe) personne;
+        }
+
+        return true;
+    }
+    
+    // Lancer un menu (IHM)
+    public void lancerMenu() {
+        if (utilisateur != null) {
+            new MenuUtilisateur_IHM(this, utilisateur);
+        } else if (employe != null) {
+            new MenuEmploye_IHM(this, employe);
         }
     }
 
@@ -339,6 +368,109 @@ public class Controleur {
                     affichage.erreur();
             }
         }
+    }
+    
+    public boolean ajouterRessource(String nom, String marque, double prix, int dureeMax, String typeRes) {
+        int id = BDD.ajouter_res(nom, marque, true, prix, dureeMax, "Neuf", typeRes);
+
+        if (id == -1) {
+            return false;
+        }
+
+        Ressource ressource = null;
+        switch (typeRes.toLowerCase()) {
+            case "ordinateur":
+                ressource = employe.AjouterOrdinateur(id, nom, marque, 0, 0, 0, 0, prix, dureeMax, false, false, false);
+                break;
+            case "tablette_graphique":
+                ressource = employe.AjouterTablette(id, nom, marque, 0, 0, 0, 0, prix, dureeMax, "", false);
+                break;
+            case "telephone":
+                ressource = employe.AjouterTelephone(id, nom, marque, 0, 0, 0, 0, prix, dureeMax, 0);
+                break;
+            default:
+                return false;
+        }
+
+        if (ressource != null) {
+            ressources.add(ressource);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean supprimerRessource(int idRessource) {
+        boolean removed = employe.supprimerRessource(ressources, idRessource);
+        return removed;
+    }
+
+    public boolean changerEtatRessource(int idRessource, String nouvelEtat) {
+        return employe.changerEtatRessource(ressources, idRessource, nouvelEtat);
+    }
+
+    public String afficherRessources() {
+    	String ressourcesList = "";
+
+        if (ressources.isEmpty()) {
+            ressourcesList = "Aucune ressource trouvée !";
+        } else {
+            for (Ressource r : ressources) {
+                ressourcesList = ressourcesList + r.toString() + "\n";
+            }
+        }
+        return ressourcesList;
+    }
+
+    
+    public boolean ajouterUtilisateur(String nom, String dateNaissanceStr, String login, String mdp) {
+        LocalDate dateNaissance = LocalDate.parse(dateNaissanceStr);
+        Utilisateur utilisateur = new Utilisateur(nom, dateNaissance, login, mdp, LocalDate.now());
+        return employe.ajouterUtilisateur(utilisateurs, utilisateur);
+    }
+
+    public boolean supprimerUtilisateur(String login) {
+        return employe.supprimerUtilisateur(utilisateurs, login);
+    }
+    
+    public boolean ajouterEmploye(String nom, String dateNaissanceStr, String login, String mdp, double salaire, String poste) {
+        LocalDate dateNaissance = LocalDate.parse(dateNaissanceStr);
+        Employe nouvelEmploye = new Employe(nom, dateNaissance, login, mdp, salaire, 0, poste);
+        return employe.ajouterEmploye(employes, nouvelEmploye);
+    }
+
+    public boolean supprimerEmploye(String login) {
+        return employe.supprimerEmploye(employes, login);
+    }
+    
+    public String getListeUtilisateurs() {
+    	String utilisateursList = "";
+
+        if (utilisateurs.isEmpty()) {
+            utilisateursList = "Aucun utilisateur trouvé !";
+        } else {
+            for (Utilisateur u : utilisateurs) {
+            	utilisateursList = utilisateursList + u.toString() + "\n";
+            }
+        }
+        return utilisateursList;
+    }
+
+    public String getListeEmployes() {
+    	String employesList = "";
+	
+    	if (employes.isEmpty()) {
+    		employesList = "Aucun employé trouvé !";
+    	} else {
+    		for (Employe e : employes) {
+    			employesList = employesList + e.toString() + "\n";
+	        }
+	    }
+	    return employesList;
+	}
+    
+    public void deconnecter() {
+        this.utilisateur = null;
+        this.employe = null;
     }
 
 }
