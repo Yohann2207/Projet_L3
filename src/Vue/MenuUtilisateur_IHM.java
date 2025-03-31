@@ -51,11 +51,43 @@ public class MenuUtilisateur_IHM {
 
         fenetre.add(panelBoutons, BorderLayout.CENTER);
         
+        btnEmprunter.addActionListener(e -> RadioButtonExample());
         btnDeconnexion.addActionListener(e -> deconnexion());
 
         fenetre.setVisible(true);
         
     }
+    
+    public void RadioButtonExample() {
+        // Création d'une nouvelle fenêtre dédiée
+        JFrame ressourceFrame = new JFrame("Sélectionner une ressource");
+        ressourceFrame.setSize(500, 400);
+        ressourceFrame.setLocationRelativeTo(null);
+        ressourceFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        ressourceFrame.setLayout(new BorderLayout());
+
+        // Récupération de la liste des ressources
+        ArrayList<Ressource> ressources = controleur.getRessources();
+        JPanel panelRadio = new JPanel();
+        panelRadio.setLayout(new BoxLayout(panelRadio, BoxLayout.Y_AXIS));
+
+        ButtonGroup group = new ButtonGroup();
+        ArrayList<JRadioButton> boutons = new ArrayList<>();
+
+        for (Ressource r : ressources) {
+            JRadioButton bouton = new JRadioButton(r.toString());
+            bouton.setActionCommand(String.valueOf(r.getId()));
+            group.add(bouton);
+            panelRadio.add(bouton);
+            boutons.add(bouton);
+        }
+
+        // Ajout au frame
+        ressourceFrame.add(new JScrollPane(panelRadio), BorderLayout.CENTER);
+
+        ressourceFrame.setVisible(true);
+    }
+
         
     public void deconnexion() {
         fenetre.dispose();
