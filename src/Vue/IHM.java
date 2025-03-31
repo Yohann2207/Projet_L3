@@ -227,6 +227,7 @@ public class IHM {
         return lireEntreeEntier();
     }
     
+    /*
     public Utilisateur saisirNouvelUtilisateur() {
     	System.out.println("Nom : ");
         String nom = lireEntreeTexte();
@@ -258,6 +259,7 @@ public class IHM {
 
         return new Employe(nom, dateNaissance, login, mdp, salaire, prime, poste);
     }
+    */
     
     public void afficherListeUtilisateurs(ArrayList<Utilisateur> utilisateurs) {
         if (utilisateurs.isEmpty()) {

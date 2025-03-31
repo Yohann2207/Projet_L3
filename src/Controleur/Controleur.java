@@ -52,6 +52,7 @@ public class Controleur {
         //utilisateur.getEmpruntsActifs().add(empruntRetard); // Ajouter l'emprunt manuellement pour tester un rendu avec retard
     }
 
+/*
  // Demarrer l'application (console)
     public void demarrer() {
         affichage.afficherMessage("=== Bienvenue dans l'application ===");
@@ -90,6 +91,7 @@ public class Controleur {
             this.employe = null;
         }
     }
+*/
     
     // Demarrer l'application avec l'IHM
     public boolean authentifier(String login, String mdp) {
@@ -117,6 +119,7 @@ public class Controleur {
         }
     }
 
+/*
     // Menu Utilisateur
     private void gererUtilisateur() {
         boolean userMenu = true;
@@ -228,7 +231,7 @@ public class Controleur {
             	            boolean portUSBC = (boolean) optionsOrdinateur[1];
             	            boolean portHDMI = (boolean) optionsOrdinateur[2];
 
-            	            ressource = employe.AjouterOrdinateur(id, nom, marque, autonomie, nbCoeurs, memoire, resolution, prix, dureeMax, portUSB, portUSBC, portHDMI);
+            	            ressource = employe.AjouterOrdinateur(ressources, id, nom, marque, autonomie, nbCoeurs, memoire, resolution, prix, dureeMax, portUSB, portUSBC, portHDMI);
             	            typeRes = "Ordinateur";
             	            break;
 
@@ -237,14 +240,14 @@ public class Controleur {
             	            String logiciel = (String) optionsTablette[0];
             	            boolean estAccessoire = (boolean) optionsTablette[1];
 
-            	            ressource = employe.AjouterTablette(id, nom, marque, autonomie, nbCoeurs, memoire, resolution, prix, dureeMax, logiciel, estAccessoire);
+            	            ressource = employe.AjouterTablette(ressources, id, nom, marque, autonomie, nbCoeurs, memoire, resolution, prix, dureeMax, logiciel, estAccessoire);
             	            typeRes = "Tablette_graphique";
             	            break;
 
             	        case 3: // Téléphone
             	        	int numero = affichage.saisirOptionsTelephone();
 
-            	            ressource = employe.AjouterTelephone(id, nom, marque, autonomie, nbCoeurs, memoire, resolution, prix, dureeMax, numero);
+            	            ressource = employe.AjouterTelephone(ressources, id, nom, marque, autonomie, nbCoeurs, memoire, resolution, prix, dureeMax, numero);
             	            typeRes = "Telephone";
             	            break;
 
@@ -369,6 +372,7 @@ public class Controleur {
             }
         }
     }
+*/
     
     public boolean ajouterRessource(String nom, String marque, double prix, int dureeMax, String typeRes) {
         int id = BDD.ajouter_res(nom, marque, true, prix, dureeMax, "Neuf", typeRes);
@@ -380,20 +384,19 @@ public class Controleur {
         Ressource ressource = null;
         switch (typeRes.toLowerCase()) {
             case "ordinateur":
-                ressource = employe.AjouterOrdinateur(id, nom, marque, 0, 0, 0, 0, prix, dureeMax, false, false, false);
+                ressource = employe.AjouterOrdinateur(ressources, id, nom, marque, 0, 0, 0, 0, prix, dureeMax, false, false, false);
                 break;
             case "tablette_graphique":
-                ressource = employe.AjouterTablette(id, nom, marque, 0, 0, 0, 0, prix, dureeMax, "", false);
+                ressource = employe.AjouterTablette(ressources, id, nom, marque, 0, 0, 0, 0, prix, dureeMax, "", false);
                 break;
             case "telephone":
-                ressource = employe.AjouterTelephone(id, nom, marque, 0, 0, 0, 0, prix, dureeMax, 0);
+                ressource = employe.AjouterTelephone(ressources, id, nom, marque, 0, 0, 0, 0, prix, dureeMax, 0);
                 break;
             default:
                 return false;
         }
 
         if (ressource != null) {
-            ressources.add(ressource);
             return true;
         }
         return false;
@@ -409,6 +412,7 @@ public class Controleur {
     }
 
     public String afficherRessources() {
+    	ressources = BDD.recupererToutesLesRessources();
     	String ressourcesList = "";
 
         if (ressources.isEmpty()) {
@@ -420,12 +424,21 @@ public class Controleur {
         }
         return ressourcesList;
     }
-
+    
+    public ArrayList<Ressource> getRessources() {
+    	ressources = BDD.recupererToutesLesRessources();
+        return ressources;
+    }
     
     public boolean ajouterUtilisateur(String nom, String dateNaissanceStr, String login, String mdp) {
         LocalDate dateNaissance = LocalDate.parse(dateNaissanceStr);
-        Utilisateur utilisateur = new Utilisateur(nom, dateNaissance, login, mdp, LocalDate.now());
-        return employe.ajouterUtilisateur(utilisateurs, utilisateur);
+
+        int id = BDD.ajouter_uti(nom, dateNaissance, login, mdp);
+        if (id != -1) {
+            Utilisateur utilisateur = new Utilisateur(id, nom, dateNaissance, login, mdp, LocalDate.now());
+            return employe.ajouterUtilisateur(utilisateurs, utilisateur);
+        }
+        return false;
     }
 
     public boolean supprimerUtilisateur(String login) {
@@ -433,9 +446,14 @@ public class Controleur {
     }
     
     public boolean ajouterEmploye(String nom, String dateNaissanceStr, String login, String mdp, double salaire, String poste) {
-        LocalDate dateNaissance = LocalDate.parse(dateNaissanceStr);
-        Employe nouvelEmploye = new Employe(nom, dateNaissance, login, mdp, salaire, 0, poste);
-        return employe.ajouterEmploye(employes, nouvelEmploye);
+    	LocalDate dateNaissance = LocalDate.parse(dateNaissanceStr);
+
+        int id = BDD.ajouter_employe(nom, dateNaissance, login, mdp, salaire, poste);
+        if (id != -1) {
+            Employe employe = new Employe(id, nom, dateNaissance, login, mdp, salaire, poste);
+            return employe.ajouterEmploye(employes, employe);
+        }
+        return false;
     }
 
     public boolean supprimerEmploye(String login) {
@@ -443,6 +461,7 @@ public class Controleur {
     }
     
     public String getListeUtilisateurs() {
+    	utilisateurs = BDD.recupererTousLesUtilisateurs();
     	String utilisateursList = "";
 
         if (utilisateurs.isEmpty()) {
@@ -456,6 +475,7 @@ public class Controleur {
     }
 
     public String getListeEmployes() {
+    	employes = BDD.recupererTousLesEmployes();
     	String employesList = "";
 	
     	if (employes.isEmpty()) {

@@ -14,28 +14,31 @@ public class Employe extends Personne{
 	private double prime; //a voir rajouter cu 
 	private String role; // exemple admin 
 	
-	public Employe(String nom, LocalDate date_naissance, String login, String mdp, double salaire, double prime, String role) {
-		super(nom, date_naissance, login, mdp);
+	public Employe(int id, String nom, LocalDate date_naissance, String login, String mdp, double salaire, String role) {
+		super(id, nom, date_naissance, login, mdp);
 		this.salaire=salaire;
-		this.prime=prime;
+		this.prime=0;
 		this.role=role;
 	}
 	
 	// Ajouter un ordinateur
-	public Ressource AjouterOrdinateur(int id, String nom,String marque, int autonomie, int nbCoeurs, int memoire, int resolution, double prix, int dureeMax, boolean portUSB, boolean portUSBC, boolean portHDMI) {
+	public Ressource AjouterOrdinateur(ArrayList<Ressource> ressources, int id, String nom,String marque, int autonomie, int nbCoeurs, int memoire, int resolution, double prix, int dureeMax, boolean portUSB, boolean portUSBC, boolean portHDMI) {
 		Ressource ordinateur = new Ordinateur(id, nom, marque, autonomie, nbCoeurs, memoire, resolution, true, prix, dureeMax, portUSB, portUSBC, portHDMI);
+        ressources = BDD.recupererToutesLesRessources();
 		return ordinateur;
 	}
 
 	// Ajouter une tablette
-	public Ressource AjouterTablette(int id, String nom, String marque, int autonomie, int nbCoeurs, int memoire, int resolution, double prix, int dureeMax, String logiciel, boolean estAccessoire) {
+	public Ressource AjouterTablette(ArrayList<Ressource> ressources, int id, String nom, String marque, int autonomie, int nbCoeurs, int memoire, int resolution, double prix, int dureeMax, String logiciel, boolean estAccessoire) {
 		Ressource tablette = new Tablette_graphique(id, nom, marque, autonomie, nbCoeurs, memoire, resolution, true, prix, dureeMax, logiciel, estAccessoire);
+        ressources = BDD.recupererToutesLesRessources();
 		return tablette;
 	}
 
 	// Ajouter un telephone
-	public Ressource AjouterTelephone(int id, String nom, String marque, int autonomie, int nbCoeurs, int memoire, int resolution, double prix, int dureeMax, int numero) {
+	public Ressource AjouterTelephone(ArrayList<Ressource> ressources, int id, String nom, String marque, int autonomie, int nbCoeurs, int memoire, int resolution, double prix, int dureeMax, int numero) {
 		Ressource telephone = new Telephone(id, nom, marque, autonomie, nbCoeurs, memoire, resolution, true, prix, dureeMax, numero);
+        ressources = BDD.recupererToutesLesRessources();
 		return telephone;
 	}
 	
@@ -43,8 +46,8 @@ public class Employe extends Personne{
 	public boolean supprimerRessource(ArrayList<Ressource> ressources, int index) {
 	    for (Ressource r : ressources) {
 	        if (r.getId() == index) {
-	            ressources.remove(r);
 	            BDD.supprimer_res(index);
+	            ressources = BDD.recupererToutesLesRessources();
 	            return true;
 	        }
 	    }
@@ -55,8 +58,8 @@ public class Employe extends Personne{
 	public boolean changerEtatRessource(ArrayList<Ressource> ressources, int index, String nouvelEtat) {
 	    for (Ressource r : ressources) {
 	        if (r.getId() == index) {
-	            r.setEtat(nouvelEtat);
 	            BDD.changer_etat_res(nouvelEtat, index);
+	            ressources = BDD.recupererToutesLesRessources();
 	            return true;
 	        }
 	    }
@@ -70,8 +73,7 @@ public class Employe extends Personne{
 	            return false;
 	        }
 	    }
-	    utilisateurs.add(utilisateur);
-	    BDD.ajouter_uti(utilisateur.getNom(), utilisateur.getDate_naissance(), utilisateur.getLogin(), utilisateur.getMdp());
+	    utilisateurs = BDD.recupererTousLesUtilisateurs();
 	    return true;
 	}
     
@@ -79,8 +81,8 @@ public class Employe extends Personne{
 	public boolean supprimerUtilisateur(ArrayList<Utilisateur> utilisateurs, String login) {
 	    for (Utilisateur u : utilisateurs) {
 	        if (u.getLogin().equalsIgnoreCase(login)) {
-	            utilisateurs.remove(u);
 	            BDD.supprimer_uti(login);
+	    	    utilisateurs = BDD.recupererTousLesUtilisateurs();
 	            return true;
 	        }
 	    }
@@ -94,8 +96,7 @@ public class Employe extends Personne{
 	            return false;
 	        }
 	    }
-	    employes.add(nouvelEmploye);
-	    BDD.ajouter_employe(nouvelEmploye.getNom(), nouvelEmploye.getDate_naissance(), nouvelEmploye.getLogin(), nouvelEmploye.getMdp(), nouvelEmploye.getSalaire(), nouvelEmploye.getRole());
+	    employes = BDD.recupererTousLesEmployes();
 	    return true;
 	}
     
@@ -103,8 +104,8 @@ public class Employe extends Personne{
 	public boolean supprimerEmploye(ArrayList<Employe> employes, String login) {
 	    for (Employe e : employes) {
 	        if (e.getLogin().equalsIgnoreCase(login)) {
-	            employes.remove(e);
 	            BDD.supprimer_employe(login);
+	            employes = BDD.recupererTousLesEmployes();
 	            return true;
 	        }
 	    }
@@ -125,6 +126,6 @@ public class Employe extends Personne{
 
 	@Override
 	public String toString() {
-		return "Nom : " + getNom() + " | Login : " + getLogin() + " | Poste : " + getRole() + " | Salaire : " + getSalaire() + " euros";	
+		return "Id : " + getId() + " | Nom : " + getNom() + " | Login : " + getLogin() + " | Poste : " + getRole() + " | Salaire : " + getSalaire() + " euros";	
 	}
 }

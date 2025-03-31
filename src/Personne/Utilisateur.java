@@ -22,8 +22,8 @@ public class Utilisateur extends Personne{
     private static final double PENALITE_PAR_JOUR = 5; // Pénalité de retard en euros par jour
 
 	
-	public Utilisateur(String nom, LocalDate date_naissance, String login, String mdp, LocalDate date_inscription) {
-		super(nom, date_naissance, login, mdp);
+	public Utilisateur(int id, String nom, LocalDate date_naissance, String login, String mdp, LocalDate date_inscription) {
+		super(id, nom, date_naissance, login, mdp);
 		this.date_inscription=date_inscription;
 		this.dette=0;
 		this.is_premium=false;
@@ -65,7 +65,7 @@ public class Utilisateur extends Personne{
             Emprunt nouvelEmprunt = new Emprunt(this, ressource, LocalDate.now());
             empruntsActifs.add(nouvelEmprunt);
             ressource.setLibre(false);
-            BDD.ajouter_emprunt();
+            BDD.ajouterEmprunt(ressource.getId(), this.getId());
         }
     }
 
@@ -109,7 +109,7 @@ public class Utilisateur extends Personne{
 
 	@Override
 	public String toString() {
-	    return "Nom : " + getNom() + " | Login : " + getLogin() + " | Dette : " + getDette() + " euros" + " | Premium : " + (getIs_premium() ? "Oui" : "Non");
+	    return "Id : " + getId() + " | Nom : " + getNom() + " | Login : " + getLogin() + " | Dette : " + getDette() + " euros" + " | Premium : " + (getIs_premium() ? "Oui" : "Non");
 	}
 
 }

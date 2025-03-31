@@ -8,11 +8,13 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.sql.Statement;
 import Personne.Employe;
+import Personne.Personne;
 import Personne.Utilisateur;
 import Ressource.Ordinateur;
 import Ressource.Ressource;
 import Ressource.Tablette_graphique;
 import Ressource.Telephone;
+import Transaction.Emprunt;
 
 public class BDD {
 	
@@ -31,6 +33,76 @@ public class BDD {
             
         } catch (SQLException e) {
           
+        }
+    }
+    
+    public static int ajouter_emp(String etat, String com, LocalDate date_rendu, int id_res, int id_uti, int id_paiement) {
+        String sql = "INSERT INTO Emprunt (date_emp, etat_emp, com, date_rendu, id_res, id_uti, id_paiement) VALUES (?, ?, ?, ?, ?, ?, ?)";
+
+        try (Connection conn = Connexion_BDD.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+
+            pstmt.setDate(1, java.sql.Date.valueOf(LocalDate.now()));
+            pstmt.setString(2, etat);
+            pstmt.setString(3, com);
+            pstmt.setDate(4, java.sql.Date.valueOf(date_rendu));
+            pstmt.setInt(5, id_res);
+            pstmt.setInt(6, id_uti);
+            pstmt.setInt(7, id_paiement);
+
+            int rows = pstmt.executeUpdate();
+
+            if (rows > 0) {
+                ResultSet rs = pstmt.getGeneratedKeys();
+                if (rs.next()) {
+                    return rs.getInt(1);  
+                }
+            }
+
+        } catch (SQLException e) {
+        	
+        }
+
+        return -1; 
+    }
+    
+    public static boolean ajouterEmprunt(int idRes, int idUti) {
+        String sql = "INSERT INTO Emprunt (date_emp, etat_emp, id_res, id_uti) VALUES (?, ?, ?, ?)";
+
+        try (Connection conn = Connexion_BDD.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setDate(1, java.sql.Date.valueOf(LocalDate.now()));  // Date d'aujourd'hui
+            pstmt.setString(2, "En cours");                            // État initial
+            pstmt.setInt(3, idRes);                                    // Ressource empruntée
+            pstmt.setInt(4, idUti);                                    // Utilisateur emprunteur
+
+            int rows = pstmt.executeUpdate();
+
+            if (rows > 0) {
+                changerDisponibiliteRessource(idRes, false);
+                return true;
+            }
+
+        } catch (SQLException e) {
+        	
+        }
+
+        return false;
+    }
+    
+    public static void changerDisponibiliteRessource(int idRes, boolean libre) {
+        String sql = "UPDATE Ressource SET libre = ? WHERE id_res = ?";
+
+        try (Connection conn = Connexion_BDD.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setBoolean(1, libre);
+            pstmt.setInt(2, idRes);
+            pstmt.executeUpdate();
+
+        } catch (SQLException e) {
+        	
         }
     }
     
@@ -79,26 +151,36 @@ public class BDD {
         	
         }
     }
-
-    public static void ajouter_uti(String nom, LocalDate date_naissance, String login, String mdp) {
+    
+    public static int ajouter_uti(String nom, LocalDate date_naissance, String login, String mdp) {
         String sql = "INSERT INTO utilisateur (nom_uti, date_naissance_uti, login_uti, mdp_uti) VALUES (?, ?, ?, ?)";
 
         try (Connection conn = Connexion_BDD.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+             PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
             String mdpHash = Hashage.hashermdp(mdp);
 
             pstmt.setString(1, nom);
-            pstmt.setDate(2, java.sql.Date.valueOf(date_naissance));  // conversion LocalDate -> java.sql.Date
+            pstmt.setDate(2, java.sql.Date.valueOf(date_naissance));
             pstmt.setString(3, login);
             pstmt.setString(4, mdpHash);
 
-            pstmt.executeUpdate();
+            int rows = pstmt.executeUpdate();
+
+            if (rows > 0) {
+                ResultSet rs = pstmt.getGeneratedKeys();
+                if (rs.next()) {
+                    return rs.getInt(1);
+                }
+            }
 
         } catch (SQLException e) {
         	
         }
+
+        return -1;
     }
+
 
     public static void supprimer_uti(String login) {
         //Requete SQL pour supprimer l'utilisateur via son login
@@ -116,7 +198,7 @@ public class BDD {
         }
     }
     
-    public static void ajouter_employe(String nom, LocalDate date_naissance, String login, String mdp, double salaire, String poste) {
+    public static int ajouter_employe(String nom, LocalDate date_naissance, String login, String mdp, double salaire, String poste) {
         String sql = "INSERT INTO Employe (nom_employe, date_naissance_employe, login_employe, mdp_employe, salaire, poste) VALUES (?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = Connexion_BDD.getConnection();
@@ -131,11 +213,19 @@ public class BDD {
             pstmt.setDouble(5, salaire);
             pstmt.setString(6, poste);
 
-            pstmt.executeUpdate();
+            int rows = pstmt.executeUpdate();
+
+            if (rows > 0) {
+                ResultSet rs = pstmt.getGeneratedKeys();
+                if (rs.next()) {
+                    return rs.getInt(1); // retourne l'ID généré
+                }
+            }
 
         } catch (SQLException e) {
         	
         }
+        return -1; 
     }
     
     public static void supprimer_employe(String login) {
@@ -165,12 +255,6 @@ public class BDD {
         //Requete SQL pour afficher l'historique des paiements 
 
     }
-
-    public static void ajouter_emprunt() {
-        //Requete SQL pour ajouter un emprunt (paramètres variables selon notre future BDD) 
-        System.out.println("L'emprunt a ete ajoute avec succes");
-
-    }
     
     public static ArrayList<Utilisateur> recupererTousLesUtilisateurs() {
         ArrayList<Utilisateur> utilisateurs = new ArrayList<>();
@@ -182,6 +266,7 @@ public class BDD {
              ResultSet rs = pstmt.executeQuery()) {
 
             while (rs.next()) {
+            	int id = rs.getInt("id_uti");
                 String nom = rs.getString("nom_uti");
                 LocalDate date = rs.getDate("date_naissance_uti").toLocalDate();
                 String login = rs.getString("login_uti");
@@ -190,7 +275,7 @@ public class BDD {
                 double dette = rs.getDouble("dette");
                 boolean premium = rs.getBoolean("premium");
 
-                Utilisateur utilisateur = new Utilisateur(nom, date, login, mdp, dateCreation);
+                Utilisateur utilisateur = new Utilisateur(id, nom, date, login, mdp, dateCreation);
                 utilisateur.setDette(dette);
                 utilisateur.setIs_premium(premium);
                 utilisateurs.add(utilisateur);
@@ -213,15 +298,15 @@ public class BDD {
              ResultSet rs = pstmt.executeQuery()) {
 
             while (rs.next()) {
+            	int id = rs.getInt("id_employe");
                 String nom = rs.getString("nom_employe");
                 LocalDate date = rs.getDate("date_naissance_employe").toLocalDate();
                 String login = rs.getString("login_employe");
                 String mdpHash = rs.getString("mdp_employe");
                 double salaire = rs.getDouble("salaire");
                 String poste = rs.getString("poste");
-                double prime = 0;
 
-                Employe employe = new Employe(nom, date, login, mdpHash, salaire, prime, poste);
+                Employe employe = new Employe(id, nom, date, login, mdpHash, salaire, poste);
 
                 employes.add(employe);
             }
@@ -291,4 +376,77 @@ public class BDD {
 
         return ressources;
     }
+    
+    public static ArrayList<Utilisateur> recupererToutesLesPersonnes() {
+        ArrayList<Utilisateur> personnes = new ArrayList<>();
+        
+        String sql = "SELECT login FROM personne";
+
+        try (Connection conn = Connexion_BDD.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql);
+             ResultSet rs = pstmt.executeQuery()) {
+
+            while (rs.next()) {
+                String login = rs.getString("login");
+
+                Personne personne = new Personne(login);
+                personnes.add(personne);
+            }
+
+        } catch (SQLException e) {
+        	
+        }
+
+        return personnes;
+    }
+    
+    public static ArrayList<Emprunt> recupererTousLesEmprunts(ArrayList<Utilisateur> utilisateurs, ArrayList<Ressource> ressources) {
+        ArrayList<Emprunt> emprunts = new ArrayList<>();
+
+        String sql = "SELECT * FROM Emprunt";
+
+        try (Connection conn = Connexion_BDD.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql);
+             ResultSet rs = pstmt.executeQuery()) {
+
+            while (rs.next()) {
+                int idEmp = rs.getInt("id_emp");
+                LocalDate dateEmp = rs.getDate("date_emp").toLocalDate();
+                String etatEmp = rs.getString("etat_emp");
+                String com = rs.getString("com");
+                LocalDate dateRendu = rs.getDate("date_rendu").toLocalDate();
+
+                int idRes = rs.getInt("id_res");
+                int idUti = rs.getInt("id_uti");
+
+                // Trouver les objets associés
+                Ressource ressource = null;
+                for (Ressource r : ressources) {
+                    if (r.getId() == idRes) {
+                        ressource = r;
+                        break;
+                    }
+                }
+
+                Utilisateur utilisateur = null;
+                for (Utilisateur u : utilisateurs) {
+                    if (u.getId() == idUti) {
+                        utilisateur = u;
+                        break;
+                    }
+                }
+
+                if (ressource != null && utilisateur != null) {
+                    Emprunt emprunt = new Emprunt();
+                    emprunts.add(emprunt);
+                }
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Erreur récupération emprunts : " + e.getMessage());
+        }
+
+        return emprunts;
+    }
+
 }

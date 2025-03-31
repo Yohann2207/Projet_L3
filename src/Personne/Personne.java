@@ -6,16 +6,22 @@ import BDD.Hashage;
 
 public class Personne {
 	
+	private int id;
 	private String nom;
 	private LocalDate date_naissance;
 	private String login;
 	private String mdp;
 	
-	public Personne(String nom, LocalDate date_naissance, String login, String mdp) {
+	public Personne(int id, String nom, LocalDate date_naissance, String login, String mdp) {
+		this.id = id;
 		this.nom=nom;
 		this.date_naissance=date_naissance;
 		this.login=login;
 		this.mdp=mdp;
+	}
+
+	public int getId() {
+		return id;
 	}
 
 	public String getNom() {
