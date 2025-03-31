@@ -140,8 +140,19 @@ public class MenuEmploye_IHM {
         String nom = JOptionPane.showInputDialog(fenetre, "Nom de l'utilisateur :");
         String dateNaissanceStr = JOptionPane.showInputDialog(fenetre, "Date de naissance (YYYY-MM-DD) :");
         String login = JOptionPane.showInputDialog(fenetre, "Login :");
-        String mdp = JOptionPane.showInputDialog(fenetre, "Mot de passe :");
 
+
+        char[] mdpArray;
+        JPasswordField passwordField = new JPasswordField();
+        int option = JOptionPane.showConfirmDialog(fenetre, passwordField, "Mot de passe :", JOptionPane.PLAIN_MESSAGE);
+        if (option != JOptionPane.OK_OPTION) return;
+        mdpArray = passwordField.getPassword();
+       
+        String mdp = new String(mdpArray);
+        
+        
+        
+        
         boolean success = controleur.ajouterUtilisateur(nom, dateNaissanceStr, login, mdp);
 
         if (success) {
@@ -149,6 +160,8 @@ public class MenuEmploye_IHM {
         } else {
             JOptionPane.showMessageDialog(fenetre, "Erreur : Login déjà existant !");
         }
+        
+        
     }
 
     public void supprimerUtilisateur() {
@@ -167,7 +180,19 @@ public class MenuEmploye_IHM {
         String nom = JOptionPane.showInputDialog(fenetre, "Nom de l'employé :");
         String dateNaissanceStr = JOptionPane.showInputDialog(fenetre, "Date de naissance (YYYY-MM-DD) :");
         String login = JOptionPane.showInputDialog(fenetre, "Login :");
-        String mdp = JOptionPane.showInputDialog(fenetre, "Mot de passe :");
+        
+        
+        char[] mdpArray;
+        JPasswordField passwordField = new JPasswordField();
+        int option = JOptionPane.showConfirmDialog(fenetre, passwordField, "Mot de passe :", JOptionPane.PLAIN_MESSAGE);
+        if (option != JOptionPane.OK_OPTION) return;
+        mdpArray = passwordField.getPassword();
+       
+        String mdp = new String(mdpArray);
+        
+        
+        
+        
         String salaireStr = JOptionPane.showInputDialog(fenetre, "Salaire :");
         String poste = JOptionPane.showInputDialog(fenetre, "Poste :");
 
@@ -208,6 +233,8 @@ public class MenuEmploye_IHM {
         String employesList = controleur.getListeEmployes();
         JOptionPane.showMessageDialog(fenetre, employesList, "Liste des Employés", JOptionPane.INFORMATION_MESSAGE);
     }
+    
+    
 
     public void deconnexion() {
         fenetre.dispose();
