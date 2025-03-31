@@ -1,8 +1,13 @@
 package Vue;
 
 import Controleur.Controleur;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
 import Personne.Employe;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 
@@ -11,12 +16,14 @@ public class MenuEmploye_IHM {
     private JFrame fenetre;
     private Controleur controleur;
     private Employe employe;
+    private BufferedImage image;
+
 
     public MenuEmploye_IHM(Controleur controleur, Employe employe) {
         this.controleur = controleur;
         this.employe = employe;
 
-        fenetre = new JFrame("Menu Employé - " + employe.getNom());
+        /*fenetre = new JFrame("Menu Employé - " + employe.getNom());
         fenetre.setSize(400, 500);
         fenetre.setLocationRelativeTo(null);
         fenetre.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -67,6 +74,95 @@ public class MenuEmploye_IHM {
         btnAfficherEmployes.addActionListener(e -> afficherEmployes());
         btnDeconnexion.addActionListener(e -> deconnexion());
 
+        fenetre.setVisible(true);
+    } */
+
+          
+    
+
+        
+
+        fenetre = new JFrame("Menu Employé - " + employe.getNom());
+        fenetre.setSize(500, 500);
+        fenetre.setLocationRelativeTo(null);
+        fenetre.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        
+        try {
+            image = ImageIO.read(new File("/Users/manonmars/Desktop/LOGO_PJ.jpg"));
+        } catch (IOException e) {
+        	e.printStackTrace();
+        }
+        
+        // Création du JPanel avec la méthode paintComponent pour dessiner l'image de fond
+        JPanel panneauFond = new JPanel() {
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g); 
+                if (image != null) {
+                    g.drawImage(image, 0, 0, getWidth(), getHeight(), this); 
+                }
+            }
+        };
+        
+        // Ajouter le JPanel comme le contentPane de la fenêtre
+        fenetre.setContentPane(panneauFond);
+        
+        // Création de la barre de menu
+        JMenuBar menuBar = new JMenuBar();
+        
+        // Menu Gestion Utilisateur
+        JMenu menuUtilisateur = new JMenu("Gestion Utilisateur");
+        JMenuItem ajouterUtilisateur = new JMenuItem("Ajouter un utilisateur");
+        JMenuItem supprimerUtilisateur = new JMenuItem("Supprimer un utilisateur");
+        JMenuItem afficherUtilisateurs = new JMenuItem("Afficher les utilisateurs");
+        menuUtilisateur.add(ajouterUtilisateur);
+        menuUtilisateur.add(supprimerUtilisateur);
+        menuUtilisateur.add(afficherUtilisateurs);
+        
+        // Menu Gestion Employé
+        JMenu menuEmploye = new JMenu("Gestion Employé");
+        JMenuItem ajouterEmploye = new JMenuItem("Ajouter un employé");
+        JMenuItem supprimerEmploye = new JMenuItem("Supprimer un employé");
+        JMenuItem afficherEmployes = new JMenuItem("Afficher les employés");
+        menuEmploye.add(ajouterEmploye);
+        menuEmploye.add(supprimerEmploye);
+        menuEmploye.add(afficherEmployes);
+        
+        // Menu Gestion Ressource
+        JMenu menuRessource = new JMenu("Gestion Ressource");
+        JMenuItem ajouterRessource = new JMenuItem("Ajouter une ressource");
+        JMenuItem supprimerRessource = new JMenuItem("Supprimer une ressource");
+        JMenuItem changerEtatRessource = new JMenuItem("Changer état d'une ressource");
+        JMenuItem afficherRessources = new JMenuItem("Afficher toutes les ressources");
+        menuRessource.add(ajouterRessource);
+        menuRessource.add(supprimerRessource);
+        menuRessource.add(changerEtatRessource);
+        menuRessource.add(afficherRessources);
+        
+        // Ajouter les menus à la barre de menu
+        menuBar.add(menuUtilisateur);
+        menuBar.add(menuEmploye);
+        menuBar.add(menuRessource);
+        
+        // Définir la barre de menus
+        fenetre.setJMenuBar(menuBar);
+        
+        // Action des menus
+        ajouterUtilisateur.addActionListener(e -> ajouterUtilisateur());
+        supprimerUtilisateur.addActionListener(e -> supprimerUtilisateur());
+        afficherUtilisateurs.addActionListener(e -> afficherUtilisateurs());
+        
+        ajouterEmploye.addActionListener(e -> ajouterEmploye());
+        supprimerEmploye.addActionListener(e -> supprimerEmploye());
+        afficherEmployes.addActionListener(e -> afficherEmployes());
+        
+        ajouterRessource.addActionListener(e -> ajouterRessource());
+        supprimerRessource.addActionListener(e -> supprimerRessource());
+        changerEtatRessource.addActionListener(e -> changerEtatRessource());
+        afficherRessources.addActionListener(e -> afficherRessources());
+
+        
+        
+        // Afficher la fenêtre
         fenetre.setVisible(true);
     }
 
