@@ -24,6 +24,7 @@ public class Controleur {
     private ArrayList<Ressource> ressources;
     private ArrayList<Utilisateur> utilisateurs;
     private ArrayList<Employe> employes;
+    private ArrayList<Emprunt> emprunts;
 
     public Controleur() {
         this.affichage = new IHM();
@@ -31,6 +32,7 @@ public class Controleur {
         this.utilisateurs = BDD.recupererTousLesUtilisateurs();
         this.employes = BDD.recupererTousLesEmployes();
         this.ressources = BDD.recupererToutesLesRessources();
+        this.emprunts = BDD.recupererTousLesEmprunts(utilisateurs, ressources);
         
      // Liste des personnes
         //this.utilisateur = new Utilisateur("Alice", LocalDate.of(2000, 3, 22), "aliceY", "pass456", LocalDate.now());
@@ -389,12 +391,7 @@ public class Controleur {
             int idEmprunt = utilisateur.creerNouvelEmprunt(utilisateur, ressource);
 
             if (idEmprunt != -1) {
-                // Marquer la ressource comme non libre dans la liste mémoire
-                ressource.setLibre(false);
-
-                // Optionnel : actualiser les emprunts utilisateur (à récupérer depuis la BDD)
-                // utilisateur.setEmpruntsActifs(BDD.recupererEmpruntsParUtilisateur(utilisateur.getId()));
-
+            	BDD.recupererTousLesEmprunts(utilisateurs, ressources);
                 return true;
             }
         }
@@ -513,6 +510,22 @@ public class Controleur {
 	    }
 	    return employesList;
 	}
+    
+    public String getListeEmprunts() {
+        emprunts = BDD.recupererTousLesEmprunts(utilisateurs, ressources); 
+        String empruntsList = "";
+
+        if (emprunts.isEmpty()) {
+            empruntsList = "Aucun emprunt trouvé !";
+        } else {
+            for (Emprunt e : emprunts) {
+                empruntsList += e.toString() + "\n";
+            }
+        }
+
+        return empruntsList;
+    }
+
     
     public void deconnecter() {
         this.utilisateur = null;

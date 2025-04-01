@@ -6,6 +6,7 @@ import Ressource.Ressource;
 
 public class Emprunt {
 	
+	private int id;
 	private Utilisateur utilisateur;
 	private Ressource ressource;
 	private LocalDate date_emprunt;
@@ -15,10 +16,11 @@ public class Emprunt {
 	private LocalDate date_limite=null;
 
 	
-	public Emprunt(Utilisateur utilisateur, Ressource ressource, LocalDate date) {
+	public Emprunt(int id, Utilisateur utilisateur, Ressource ressource, LocalDate date_emprunt, LocalDate date_rendu) {
 		this.utilisateur=utilisateur;
 		this.ressource=ressource;
-		this.date_emprunt=date;
+		this.date_emprunt=date_emprunt;
+		this.date_rendu=date_rendu;
 		this.duree_max=0;
 		this.etat="en cours";
 	    setDuree();
@@ -62,9 +64,7 @@ public class Emprunt {
 	}
 	
 	public String toString() {
-		return "Emprunt " + "[ressource=" + ressource + ", date_emprunt=" + date_emprunt
-				+ ", duree_max=" + duree_max + ", date_rendu=" + date_rendu + ", etat=" + etat + ", date_limite="
-				+ date_limite + "]";
+		 return "ID: " + id + " | Utilisateur: " + utilisateur.getNom() + " | Ressource: " + ressource.getNom() + " | Début: " + date_emprunt + " | Limite: " + date_limite;
 	}
 
 	public void setEtat(String etat) {

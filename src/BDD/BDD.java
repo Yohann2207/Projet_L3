@@ -374,10 +374,11 @@ public class BDD {
         return personnes;
     }
     
+
     public static ArrayList<Emprunt> recupererTousLesEmprunts(ArrayList<Utilisateur> utilisateurs, ArrayList<Ressource> ressources) {
         ArrayList<Emprunt> emprunts = new ArrayList<>();
 
-        String sql = "SELECT * FROM Emprunt";
+        String sql = "SELECT id_emp, date_emp, date_rendu, id_res, id_uti FROM Emprunt";
 
         try (Connection conn = Connexion_BDD.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql);
@@ -385,23 +386,12 @@ public class BDD {
 
             while (rs.next()) {
                 int idEmp = rs.getInt("id_emp");
-                LocalDate dateEmp = rs.getDate("date_emp").toLocalDate();
-                String etatEmp = rs.getString("etat_emp");
-                String com = rs.getString("com");
-                LocalDate dateRendu = rs.getDate("date_rendu").toLocalDate();
-
                 int idRes = rs.getInt("id_res");
                 int idUti = rs.getInt("id_uti");
-
+                LocalDate dateEmp = rs.getDate("date_emp").toLocalDate();
+                LocalDate dateRendu =  rs.getDate("date_rendu").toLocalDate();
+                
                 // Trouver les objets associés
-                Ressource ressource = null;
-                for (Ressource r : ressources) {
-                    if (r.getId() == idRes) {
-                        ressource = r;
-                        break;
-                    }
-                }
-
                 Utilisateur utilisateur = null;
                 for (Utilisateur u : utilisateurs) {
                     if (u.getId() == idUti) {
@@ -410,17 +400,26 @@ public class BDD {
                     }
                 }
 
-                if (ressource != null && utilisateur != null) {
-                    Emprunt emprunt = new Emprunt(idEmp, utilisateur, ressource, dateEmp);
-                    emprunts.add(emprunt);
+                Ressource ressource = null;
+                for (Ressource r : ressources) {
+                    if (r.getId() == idRes) {
+                        ressource = r;
+                        break;
+                    }
+                }
+
+                if (utilisateur != null && ressource != null) {
+                    Emprunt e = new Emprunt(idEmp, utilisateur, ressource, dateEmp, dateRendu);
+                    emprunts.add(e);
                 }
             }
 
         } catch (SQLException e) {
-            System.out.println("Erreur récupération emprunts : " + e.getMessage());
+            System.out.println("Erreur récupération emprunts simplifiés : " + e.getMessage());
         }
 
         return emprunts;
     }
+
 
 }
