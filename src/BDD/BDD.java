@@ -36,8 +36,8 @@ public class BDD {
         }
     }
     
-    public static int ajouter_emp(String etat, String com, LocalDate date_rendu, int id_res, int id_uti, int id_paiement) {
-        String sql = "INSERT INTO Emprunt (date_emp, etat_emp, com, date_rendu, id_res, id_uti, id_paiement) VALUES (?, ?, ?, ?, ?, ?, ?)";
+    public static int ajouter_emprunt(String etat, String com, LocalDate dateRendu, int idRes, int idUti) {
+        String sql = "INSERT INTO Emprunt (date_emp, etat_emp, com, date_rendu, id_res, id_uti) VALUES (?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = Connexion_BDD.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
@@ -45,17 +45,16 @@ public class BDD {
             pstmt.setDate(1, java.sql.Date.valueOf(LocalDate.now()));
             pstmt.setString(2, etat);
             pstmt.setString(3, com);
-            pstmt.setDate(4, java.sql.Date.valueOf(date_rendu));
-            pstmt.setInt(5, id_res);
-            pstmt.setInt(6, id_uti);
-            pstmt.setInt(7, id_paiement);
+            pstmt.setDate(4, java.sql.Date.valueOf(dateRendu));
+            pstmt.setInt(5, idRes);
+            pstmt.setInt(6, idUti);
 
             int rows = pstmt.executeUpdate();
-
             if (rows > 0) {
+                changerDisponibiliteRessource(idRes, false);
                 ResultSet rs = pstmt.getGeneratedKeys();
                 if (rs.next()) {
-                    return rs.getInt(1);  
+                    return rs.getInt(1); // Retourne l'ID de l'emprunt ajouté
                 }
             }
 
@@ -63,32 +62,7 @@ public class BDD {
         	
         }
 
-        return -1; 
-    }
-    
-    public static boolean ajouterEmprunt(int idRes, int idUti) {
-        String sql = "INSERT INTO Emprunt (date_emp, etat_emp, id_res, id_uti) VALUES (?, ?, ?, ?)";
-
-        try (Connection conn = Connexion_BDD.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-
-            pstmt.setDate(1, java.sql.Date.valueOf(LocalDate.now()));  // Date d'aujourd'hui
-            pstmt.setString(2, "En cours");                            // État initial
-            pstmt.setInt(3, idRes);                                    // Ressource empruntée
-            pstmt.setInt(4, idUti);                                    // Utilisateur emprunteur
-
-            int rows = pstmt.executeUpdate();
-
-            if (rows > 0) {
-                changerDisponibiliteRessource(idRes, false);
-                return true;
-            }
-
-        } catch (SQLException e) {
-        	
-        }
-
-        return false;
+        return -1;
     }
     
     public static void changerDisponibiliteRessource(int idRes, boolean libre) {
@@ -437,7 +411,7 @@ public class BDD {
                 }
 
                 if (ressource != null && utilisateur != null) {
-                    Emprunt emprunt = new Emprunt();
+                    Emprunt emprunt = new Emprunt(idEmp, utilisateur, ressource, dateEmp);
                     emprunts.add(emprunt);
                 }
             }

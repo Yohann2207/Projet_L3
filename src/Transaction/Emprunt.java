@@ -18,14 +18,11 @@ public class Emprunt {
 	public Emprunt(Utilisateur utilisateur, Ressource ressource, LocalDate date) {
 		this.utilisateur=utilisateur;
 		this.ressource=ressource;
-		this.date_emprunt= date;
+		this.date_emprunt=date;
 		this.duree_max=0;
 		this.etat="en cours";
 	    setDuree();
 	    setDate_limite();
-	    //Test rendu retard
-	    System.out.println("Date emprunt initialisee : " + this.date_emprunt);
-	    System.out.println("Date limite calculee : " + this.date_limite);
 	}
 	
 	//Durée max de l'emprunt

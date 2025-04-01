@@ -374,6 +374,35 @@ public class Controleur {
     }
 */
     
+    public boolean ajouterNouvelEmprunt(int idRessource) {
+        Ressource ressource = null;
+
+        // Recherche de la ressource à partir de son ID
+        for (Ressource r : ressources) {
+            if (r.getId() == idRessource) {
+                ressource = r;
+                break;
+            }
+        }
+
+        if (ressource != null && utilisateur != null) {
+            int idEmprunt = utilisateur.creerNouvelEmprunt(utilisateur, ressource);
+
+            if (idEmprunt != -1) {
+                // Marquer la ressource comme non libre dans la liste mémoire
+                ressource.setLibre(false);
+
+                // Optionnel : actualiser les emprunts utilisateur (à récupérer depuis la BDD)
+                // utilisateur.setEmpruntsActifs(BDD.recupererEmpruntsParUtilisateur(utilisateur.getId()));
+
+                return true;
+            }
+        }
+
+        return false;
+    }
+    
+    
     public boolean ajouterRessource(String nom, String marque, double prix, int dureeMax, String typeRes) {
         int id = BDD.ajouter_res(nom, marque, true, prix, dureeMax, "Neuf", typeRes);
 
@@ -425,10 +454,7 @@ public class Controleur {
         return ressourcesList;
     }
     
-    public ArrayList<Ressource> getRessources() {
-    	ressources = BDD.recupererToutesLesRessources();
-        return ressources;
-    }
+   
     
     public boolean ajouterUtilisateur(String nom, String dateNaissanceStr, String login, String mdp) {
         LocalDate dateNaissance = LocalDate.parse(dateNaissanceStr);

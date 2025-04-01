@@ -59,6 +59,7 @@ public class Utilisateur extends Personne{
 		is_a_jour=false;
 	}
 	
+	/*
 	// Emprunter une ressource
 	public void emprunter(Ressource ressource) {
         if (ressource.isLibre()) {
@@ -68,6 +69,19 @@ public class Utilisateur extends Personne{
             BDD.ajouterEmprunt(ressource.getId(), this.getId());
         }
     }
+	*/
+	
+	public int creerNouvelEmprunt(Utilisateur utilisateur, Ressource ressource) {
+	    String etat = "En cours";
+	    String com = "Aucun commentaire";
+	    LocalDate dateEmp = LocalDate.now();
+	    LocalDate dateRendu = dateEmp.plusDays(ressource.getDuree_max());
+	    int idRes = ressource.getId();
+	    int idUti = utilisateur.getId();
+
+	    return BDD.ajouter_emprunt(etat, com, dateRendu, idRes, idUti);
+	}
+	
 
 	//Rendre une ressource
     public void rendre(int index) {
