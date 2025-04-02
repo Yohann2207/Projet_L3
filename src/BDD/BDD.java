@@ -292,6 +292,86 @@ public class BDD {
         return employes;
     }
     
+    
+    public static double recuperer_dette(int id) {
+        double dette = 0.00;
+         
+        String sql = "SELECT dette FROM utilisateur WHERE id_uti = ?";
+
+        try (Connection conn = Connexion_BDD.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+             
+            pstmt.setInt(1, id);
+            ResultSet rs = pstmt.executeQuery();
+            
+            if (rs.next()) {
+                dette = rs.getDouble("dette");
+            }
+
+        } catch (SQLException e) {
+        }
+
+        return dette;
+    }
+    
+    public static void payer_dette(int id) {
+        
+        String sql = "UPDATE utilisateur SET dette = 0 WHERE id_uti = ?";
+
+        try (Connection conn = Connexion_BDD.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+             
+            pstmt.setInt(1, id);
+            pstmt.executeUpdate(); 
+             
+        } catch (SQLException e) {
+        }
+    }
+     
+    
+    
+    
+  
+    
+    
+    
+    public static ArrayList<Ressource> recupererResLibre() {
+        ArrayList<Ressource> res = new ArrayList<>();
+        
+        String sql = "SELECT * FROM ressource WHERE libre=1";
+
+        try (Connection conn = Connexion_BDD.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql);
+             ResultSet rs = pstmt.executeQuery()) {
+
+            while (rs.next()) {
+            	int id_res = rs.getInt("id_res");
+                String nom_res = rs.getString("nom_res");
+                String marque = rs.getString("marque");
+                boolean libre = rs.getBoolean("libre");
+                double prix = rs.getDouble("prix");
+                int duree_max = rs.getInt("duree_max");
+                String etat_res = rs.getString("etat_res");
+                String type_res = rs.getString("type_res");
+                Ressource ressource = new Ressource(id_res, nom_res, marque, libre, prix, duree_max, etat_res, type_res);
+
+                res.add(ressource);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        
+
+        return res;
+    }
+    
+    
+    
+    
+    
+    
+    
     public static ArrayList<Ressource> recupererToutesLesRessources() {
         ArrayList<Ressource> ressources = new ArrayList<>();
 
@@ -351,6 +431,7 @@ public class BDD {
         return ressources;
     }
     
+    /*
     public static ArrayList<Utilisateur> recupererToutesLesPersonnes() {
         ArrayList<Utilisateur> personnes = new ArrayList<>();
         
@@ -373,6 +454,7 @@ public class BDD {
 
         return personnes;
     }
+    */
     
 
     public static ArrayList<Emprunt> recupererTousLesEmprunts(ArrayList<Utilisateur> utilisateurs, ArrayList<Ressource> ressources) {

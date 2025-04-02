@@ -400,6 +400,15 @@ public class Controleur {
     }
     
     
+    public double recup_dette() {
+    	double dette= BDD.recuperer_dette(this.utilisateur.getId());
+    			return dette;
+    }
+    
+    public void pay_dette() {
+    	BDD.payer_dette(this.utilisateur.getId());
+    }
+    
     public boolean ajouterRessource(String nom, String marque, double prix, int dureeMax, String typeRes) {
         int id = BDD.ajouter_res(nom, marque, true, prix, dureeMax, "Neuf", typeRes);
 
@@ -437,6 +446,7 @@ public class Controleur {
         return employe.changerEtatRessource(ressources, idRessource, nouvelEtat);
     }
 
+    
     public String afficherRessources() {
     	ressources = BDD.recupererToutesLesRessources();
     	String ressourcesList = "";
@@ -451,6 +461,24 @@ public class Controleur {
         return ressourcesList;
     }
     
+    public String afficherRessourcesLibres() {
+    	ressources = BDD.recupererResLibre();
+    	String ressourcesList = "";
+
+        if (ressources.isEmpty()) {
+            ressourcesList = "Aucune ressource trouvée !";
+        } else {
+            for (Ressource r : ressources) {
+                ressourcesList = ressourcesList + r.toString() + "\n";
+            }
+        }
+        return ressourcesList;
+    }
+    
+    public ArrayList<Ressource> getRessourcesAL() {
+        ArrayList<Ressource> ressourcesLibres = BDD.recupererResLibre();
+        return ressourcesLibres;
+    }
    
     
     public boolean ajouterUtilisateur(String nom, String dateNaissanceStr, String login, String mdp) {

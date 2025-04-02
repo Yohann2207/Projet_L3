@@ -28,7 +28,17 @@ public class Ressource {
         this.etat="Neuf";
     }
 
-    public int getDuree_max() {
+    public Ressource(int id_res, String nom_res, String marque2, boolean libre2, double prix2, int duree_max2, String etat_res, String type_res) {
+    	this.id = id_res;
+    	this.nom = nom_res;
+    	this.marque = marque2;
+    	this.libre = libre2;
+    	this.prix = prix2;
+    	this.duree_max = duree_max2;
+    	this.etat = etat_res != null ? etat_res : "Neuf"; 
+    }
+
+	public int getDuree_max() {
         return duree_max;
     }
     
@@ -76,6 +86,11 @@ public class Ressource {
 
 	public String getEtat() {
 		return etat;
+	}
+
+	public String getMarque() {
+		// TODO Auto-generated method stub
+		return marque;
 	}
 
 }

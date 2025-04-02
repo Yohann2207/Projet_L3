@@ -94,7 +94,8 @@ public class MenuEmploye_IHM {
         	e.printStackTrace();
         }
         
-        // Création du JPanel avec la méthode paintComponent pour dessiner l'image de fond
+          
+        
         JPanel panneauFond = new JPanel() {
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g); 
@@ -104,12 +105,18 @@ public class MenuEmploye_IHM {
             }
         };
         
-        fenetre.setContentPane(panneauFond);
         
-        // Création de la barre de menu
+        fenetre.setContentPane(panneauFond);
+        JButton deco_boutton = new JButton("Se déconnecter");
+
+        panneauFond.setLayout(new BorderLayout()); 
+        panneauFond.add(deco_boutton, BorderLayout.SOUTH);
+
+        
+
         JMenuBar menuBar = new JMenuBar();
         
-        // Menu Gestion Utilisateur
+
         JMenu menuUtilisateur = new JMenu("Gestion Utilisateur");
         JMenuItem ajouterUtilisateur = new JMenuItem("Ajouter un utilisateur");
         JMenuItem supprimerUtilisateur = new JMenuItem("Supprimer un utilisateur");
@@ -118,7 +125,7 @@ public class MenuEmploye_IHM {
         menuUtilisateur.add(supprimerUtilisateur);
         menuUtilisateur.add(afficherUtilisateurs);
         
-        // Menu Gestion Employé
+
         JMenu menuEmploye = new JMenu("Gestion Employé");
         JMenuItem ajouterEmploye = new JMenuItem("Ajouter un employé");
         JMenuItem supprimerEmploye = new JMenuItem("Supprimer un employé");
@@ -127,7 +134,7 @@ public class MenuEmploye_IHM {
         menuEmploye.add(supprimerEmploye);
         menuEmploye.add(afficherEmployes);
         
-        // Menu Gestion Ressource
+
         JMenu menuRessource = new JMenu("Gestion Ressource");
         JMenuItem ajouterRessource = new JMenuItem("Ajouter une ressource");
         JMenuItem supprimerRessource = new JMenuItem("Supprimer une ressource");
@@ -138,15 +145,20 @@ public class MenuEmploye_IHM {
         menuRessource.add(changerEtatRessource);
         menuRessource.add(afficherRessources);
         
-        // Ajouter les menus à la barre de menu
+
         menuBar.add(menuUtilisateur);
         menuBar.add(menuEmploye);
         menuBar.add(menuRessource);
         
-        // Définir la barre de menus
+
         fenetre.setJMenuBar(menuBar);
         
-        // Action des menus
+        
+
+        
+
+        deco_boutton.addActionListener(e -> deconnexion());
+
         ajouterUtilisateur.addActionListener(e -> ajouterUtilisateur());
         supprimerUtilisateur.addActionListener(e -> supprimerUtilisateur());
         afficherUtilisateurs.addActionListener(e -> afficherUtilisateurs());
@@ -162,7 +174,7 @@ public class MenuEmploye_IHM {
 
         
         
-        // Afficher la fenêtre
+
         fenetre.setVisible(true);
     }
 
@@ -195,32 +207,32 @@ public class MenuEmploye_IHM {
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));  // Layout vertical
         
-        // Champs de saisie texte
+        
         JTextField nomField = new JTextField(20);
         JTextField marqueField = new JTextField(20);
         JTextField prixField = new JTextField(20);
         JTextField dureeMaxField = new JTextField(20);
         
-        // Liste déroulante pour le type
+
         String[] types = {"Ordinateur", "Telephone", "Tablette_graphique"};
         JComboBox<String> typeComboBox = new JComboBox<>(types);
         
-        // Ajouter les champs au panel
+
         panel.add(new JLabel("Nom de la ressource :"));
         panel.add(nomField);
         panel.add(new JLabel("Marque :"));
         panel.add(marqueField);
         panel.add(new JLabel("Type :"));
-        panel.add(typeComboBox);  // Ajout de la liste déroulante
+        panel.add(typeComboBox);  
         panel.add(new JLabel("Prix :"));
         panel.add(prixField);
         panel.add(new JLabel("Durée max :"));
         panel.add(dureeMaxField);
         
-        // Bouton de validation
+      
         JButton validerButton = new JButton("Valider");
         
-        // Action au clic du bouton
+
         validerButton.addActionListener(e -> {
             String nom = nomField.getText();
             String marque = marqueField.getText();
@@ -228,7 +240,6 @@ public class MenuEmploye_IHM {
             String prixStr = prixField.getText();
             String dureeMaxStr = dureeMaxField.getText();
             
-            // Vérification que tous les champs sont remplis
             if (nom.isEmpty() || marque.isEmpty() || type == null || prixStr.isEmpty() || dureeMaxStr.isEmpty()) {
                 JOptionPane.showMessageDialog(fenetre, "Veuillez remplir tous les champs !");
                 return;
@@ -250,10 +261,9 @@ public class MenuEmploye_IHM {
             }
         });
         
-        // Ajouter le bouton de validation
         panel.add(validerButton);
         
-        // Affichage de la fenêtre avec le panel
+
         int option = JOptionPane.showConfirmDialog(fenetre, panel, "Ajouter une ressource", JOptionPane.PLAIN_MESSAGE);
         if (option != JOptionPane.OK_OPTION) {
             return;  
@@ -261,40 +271,105 @@ public class MenuEmploye_IHM {
     }
 
 
+
+    
     public void supprimerRessource() {
-        String idStr = JOptionPane.showInputDialog(fenetre, "ID de la ressource à supprimer :");
+        String emp = controleur.afficherRessources(); 
 
-        try {
-            int id = Integer.parseInt(idStr);
-            boolean success = controleur.supprimerRessource(id);
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 
-            if (success) {
-                JOptionPane.showMessageDialog(fenetre, "Ressource supprimée !");
+        panel.add(new JLabel("Ressources disponibles :"));
+
+
+        JTextArea resTextArea = new JTextArea(10, 30);
+        resTextArea.setText(emp);
+        resTextArea.setWrapStyleWord(true);
+        resTextArea.setLineWrap(true);
+        resTextArea.setEditable(false);
+
+        JScrollPane scrollPane = new JScrollPane(resTextArea);
+        panel.add(scrollPane);
+
+        panel.add(new JLabel("ID de la ressource à supprimer :"));
+        JTextField idField = new JTextField(20);
+        panel.add(idField);
+
+        int result = JOptionPane.showConfirmDialog(null, panel, "Supprimer une ressource", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+
+        if (result == JOptionPane.OK_OPTION) {
+            String idText = idField.getText().trim();
+
+            if (!idText.isEmpty()) {
+                try {
+                    int id = Integer.parseInt(idText);
+                    boolean success = controleur.supprimerRessource(id);
+                    if (success) {
+                        JOptionPane.showMessageDialog(null, "Ressource supprimée !");
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Ressource non trouvée !");
+                    }
+                } catch (NumberFormatException e) {
+                    JOptionPane.showMessageDialog(null, "Veuillez entrer un ID valide (nombre entier) !");
+                }
             } else {
-                JOptionPane.showMessageDialog(fenetre, "Ressource non trouvée !");
+                JOptionPane.showMessageDialog(null, "Veuillez entrer un ID !");
             }
-
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(fenetre, "ID invalide !");
         }
     }
 
+
     public void changerEtatRessource() {
-        String idStr = JOptionPane.showInputDialog(fenetre, "ID de la ressource à modifier :");
-        String nouvelEtat = JOptionPane.showInputDialog(fenetre, "Nouveau statut (Libre / En maintenance...) :");
+        String[] etats = {"Neuf", "Abime", "Hors service", "En maintenance"};
+        JComboBox<String> etat_box = new JComboBox<>(etats);
+        
 
-        try {
-            int id = Integer.parseInt(idStr);
-            boolean success = controleur.changerEtatRessource(id, nouvelEtat);
+        String ressourcesAffichees = controleur.afficherRessources();
 
-            if (success) {
-                JOptionPane.showMessageDialog(fenetre, "État modifié !");
-            } else {
-                JOptionPane.showMessageDialog(fenetre, "Ressource non trouvée !");
+
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+
+        panel.add(new JLabel("Ressources disponibles :"));
+        
+
+        JTextArea ressourcesTextArea = new JTextArea(10, 30);
+        ressourcesTextArea.setText(ressourcesAffichees);
+        ressourcesTextArea.setWrapStyleWord(true); 
+        ressourcesTextArea.setLineWrap(true); 
+        ressourcesTextArea.setEditable(false); 
+        JScrollPane scrollPane = new JScrollPane(ressourcesTextArea); 
+        panel.add(scrollPane);
+        
+
+        JTextField idField = new JTextField(10);
+        panel.add(Box.createVerticalStrut(10));  
+        panel.add(new JLabel("Entrez l'ID de la ressource à modifier :"));
+        panel.add(idField);
+
+        panel.add(new JLabel("Sélectionnez le nouvel état :"));
+        panel.add(etat_box);
+
+        int selection = JOptionPane.showConfirmDialog(fenetre, panel, "Modifier l'état de la ressource", JOptionPane.OK_CANCEL_OPTION);
+
+
+        if (selection == JOptionPane.OK_OPTION) {
+            try {
+                int id = Integer.parseInt(idField.getText());
+                String nouvelEtat = (String) etat_box.getSelectedItem();
+
+                boolean success = controleur.changerEtatRessource(id, nouvelEtat);
+
+                if (success) {
+                    JOptionPane.showMessageDialog(fenetre, "État modifié avec succès !");
+                } else {
+                    JOptionPane.showMessageDialog(fenetre, "Ressource non trouvée !");
+                }
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(fenetre, "ID invalide !");
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(fenetre, "Erreur lors de la modification de l'état !");
             }
-
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(fenetre, "ID invalide !");
         }
     }
 
@@ -381,16 +456,46 @@ public class MenuEmploye_IHM {
     }
 
     
-
     public void supprimerUtilisateur() {
-        String login = JOptionPane.showInputDialog(fenetre, "Login de l'utilisateur à supprimer :");
 
-        boolean success = controleur.supprimerUtilisateur(login);
+    	String emp = controleur.getListeUtilisateurs(); 
 
-        if (success) {
-            JOptionPane.showMessageDialog(fenetre, "Utilisateur supprimé !");
-        } else {
-            JOptionPane.showMessageDialog(fenetre, "Utilisateur non trouvé !");
+
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+
+        panel.add(new JLabel("Utilisateurs disponibles :"));
+
+
+        JTextArea utiTextArea = new JTextArea(10, 30);
+        utiTextArea.setText(emp);
+        utiTextArea.setWrapStyleWord(true);
+        utiTextArea.setLineWrap(true);
+        utiTextArea.setEditable(false);
+        
+        JScrollPane scrollPane = new JScrollPane(utiTextArea);
+        panel.add(scrollPane);
+
+        panel.add(new JLabel("Login de l'utilisateur à supprimer :"));
+        JTextField loginField = new JTextField(20);
+        panel.add(loginField);
+
+        int result = JOptionPane.showConfirmDialog(null, panel, "Supprimer un utilisateur", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+
+
+        if (result == JOptionPane.OK_OPTION) {
+            String login = loginField.getText().trim();
+
+            if (!login.isEmpty()) {
+                boolean success = controleur.supprimerUtilisateur(login);
+                if (success) {
+                    JOptionPane.showMessageDialog(null, "Utilisateur supprimé !");
+                } else {
+                    JOptionPane.showMessageDialog(null, "Utilisateur non trouvé !");
+                }
+            } else {
+                JOptionPane.showMessageDialog(null, "Veuillez entrer un login !");
+            }
         }
     }
 
@@ -432,11 +537,10 @@ public class MenuEmploye_IHM {
     */
     
     public void ajouterEmploye() {
-        // Créer un JPanel pour contenir les champs de saisie
-        JPanel panel = new JPanel();
+
+    	JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));  // Layout vertical
         
-        // Créer les champs de saisie
         JTextField nomField = new JTextField(20);
         JTextField dateNaissanceField = new JTextField(20);
         JTextField loginField = new JTextField(20);
@@ -444,7 +548,7 @@ public class MenuEmploye_IHM {
         JTextField salaireField = new JTextField(20);
         JTextField posteField = new JTextField(20);
         
-        // Ajouter les composants au panel
+
         panel.add(new JLabel("Nom de l'employé :"));
         panel.add(nomField);
         panel.add(new JLabel("Date de naissance (YYYY-MM-DD) :"));
@@ -458,10 +562,10 @@ public class MenuEmploye_IHM {
         panel.add(new JLabel("Poste :"));
         panel.add(posteField);
         
-        // Créer un bouton de validation
+
         JButton validerButton = new JButton("Valider");
         
-        // Ajouter une action au bouton
+
         validerButton.addActionListener(e -> {
             String nom = nomField.getText();
             String dateNaissanceStr = dateNaissanceField.getText();
@@ -471,7 +575,7 @@ public class MenuEmploye_IHM {
             String salaireStr = salaireField.getText();
             String poste = posteField.getText();
             
-            // Valider les informations saisies
+
             if (nom.isEmpty() || dateNaissanceStr.isEmpty() || login.isEmpty() || mdp.isEmpty() || salaireStr.isEmpty() || poste.isEmpty()) {
                 JOptionPane.showMessageDialog(fenetre, "Veuillez remplir tous les champs !");
                 return;
@@ -492,27 +596,59 @@ public class MenuEmploye_IHM {
             }
         });
         
-        // Ajouter le bouton au panel
+
         panel.add(validerButton);
         
-        // Afficher la fenêtre avec le panel
+
         int option = JOptionPane.showConfirmDialog(fenetre, panel, "Ajouter un employé", JOptionPane.PLAIN_MESSAGE);
         if (option != JOptionPane.OK_OPTION) {
-            return;  // Si l'utilisateur annule, ne rien faire
+            return;  
         }
     }
 
 
     public void supprimerEmploye() {
-    	
-        String login = JOptionPane.showInputDialog(fenetre, "Login de l'employé à supprimer :");
 
-        boolean success = controleur.supprimerEmploye(login);
+    	String emp = controleur.getListeEmployes(); 
 
-        if (success) {
-            JOptionPane.showMessageDialog(fenetre, "Employé supprimé !");
-        } else {
-            JOptionPane.showMessageDialog(fenetre, "Employé non trouvé !");
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+
+
+        panel.add(new JLabel("Employés disponibles :"));
+
+
+        JTextArea employesTextArea = new JTextArea(10, 30);
+        employesTextArea.setText(emp);
+        employesTextArea.setWrapStyleWord(true);
+        employesTextArea.setLineWrap(true);
+        employesTextArea.setEditable(false);
+        
+        JScrollPane scrollPane = new JScrollPane(employesTextArea);
+        panel.add(scrollPane);
+
+
+        panel.add(new JLabel("Login de l'employé à supprimer :"));
+        JTextField loginField = new JTextField(20);
+        panel.add(loginField);
+
+
+        int result = JOptionPane.showConfirmDialog(null, panel, "Supprimer un employé", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+
+
+        if (result == JOptionPane.OK_OPTION) {
+            String login = loginField.getText().trim();
+
+            if (!login.isEmpty()) {
+                boolean success = controleur.supprimerEmploye(login);
+                if (success) {
+                    JOptionPane.showMessageDialog(null, "Employé supprimé !");
+                } else {
+                    JOptionPane.showMessageDialog(null, "Employé non trouvé !");
+                }
+            } else {
+                JOptionPane.showMessageDialog(null, "Veuillez entrer un login !");
+            }
         }
     }
     
@@ -526,7 +662,7 @@ public class MenuEmploye_IHM {
         JOptionPane.showMessageDialog(fenetre, employesList, "Liste des Employés", JOptionPane.INFORMATION_MESSAGE);
     }
     
-    
+   
 
     public void deconnexion() {
         fenetre.dispose();
