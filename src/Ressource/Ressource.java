@@ -1,5 +1,9 @@
 package Ressource;
 
+import java.util.ArrayList;
+
+import BDD.BDD;
+
 public class Ressource {
 
     private int id;
@@ -42,8 +46,8 @@ public class Ressource {
         return duree_max;
     }
     
-    public void setLibre(boolean liberte) {
-    	this.libre=liberte;
+    public void setLibre(boolean i) {
+    	this.libre=i;
     	
     }
     
@@ -89,8 +93,19 @@ public class Ressource {
 	}
 
 	public String getMarque() {
-		// TODO Auto-generated method stub
 		return marque;
+	}
+
+	public static ArrayList<Ressource> recupererToutesS() {
+	    return BDD.recupererToutesLesRessources();
+	}
+	
+	public ArrayList<Ressource> recupererToutes() {
+	    return BDD.recupererToutesLesRessources(); // ici OK car c’est dans le modèle
+	}
+	
+	public static int ajouterEnBDD(String nom, String marque, boolean libre, double prix, int dureeMax, String etat, String type) {
+	    return BDD.ajouter_res(nom, marque, libre, prix, dureeMax, etat, type);
 	}
 
 }

@@ -1,5 +1,6 @@
 package Personne;
 
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import Ressource.Ressource;
@@ -8,6 +9,7 @@ import Transaction.Paiement;
 import BDD.BDD;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 
 public class Utilisateur extends Personne{
@@ -59,17 +61,7 @@ public class Utilisateur extends Personne{
 		is_a_jour=false;
 	}
 	
-	/*
-	// Emprunter une ressource
-	public void emprunter(Ressource ressource) {
-        if (ressource.isLibre()) {
-            Emprunt nouvelEmprunt = new Emprunt(this, ressource, LocalDate.now());
-            empruntsActifs.add(nouvelEmprunt);
-            ressource.setLibre(false);
-            BDD.ajouterEmprunt(ressource.getId(), this.getId());
-        }
-    }
-	*/
+	
 	
 	public int creerNouvelEmprunt(Utilisateur utilisateur, Ressource ressource) {
 	    String etat = "En cours";
@@ -82,24 +74,24 @@ public class Utilisateur extends Personne{
 	    return BDD.ajouter_emprunt(etat, com, dateRendu, idRes, idUti);
 	}
 	
-
-	//Rendre une ressource
-    public void rendre(int index) {
-        if (index >= 0 && index < empruntsActifs.size()) {
-            Emprunt emp = empruntsActifs.get(index);
-            emp.setDate_rendu(LocalDate.now());
-            emp.getRessource().setLibre(true);
-            emp.setEtat("termine");
-            ajouterHistorique(emp);
-            long jours_retard = ChronoUnit.DAYS.between(emp.getDate_limite(), emp.getDate_rendu());
-            if (jours_retard > 0) {
-                dette += jours_retard * PENALITE_PAR_JOUR;
-            }
-            empruntsActifs.remove(index);
-        }
-    }
-
-    //Effectuer un paiment
+	
+	
+	public boolean rendreEmprunt(Emprunt emprunt) {
+	    try {
+	        // Marquer l'emprunt comme rendu dans la base de données
+	        int empruntId = emprunt.getId(); 
+	        BDD.marquerEmpruntRendu(empruntId); 
+	        
+	        // Marquer la ressource comme libre
+	        emprunt.getRessource().setLibre(true);
+	        return true; 
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	        return false; // Retourne false en cas d'erreur
+	    }
+	}
+	
+	
     public void payer(double montant) {
         if (montant > dette) {
             dette = 0;
@@ -108,15 +100,14 @@ public class Utilisateur extends Personne{
         }
     }
 
-	public ArrayList<Emprunt> getEmpruntsActifs() {
-	    return empruntsActifs;
-	}
+    public ArrayList<Emprunt> getMesEmprunts(ArrayList<Utilisateur> utilisateurs, ArrayList<Ressource> ressources) {
+        return BDD.recupererEmpruntsParUtilisateur(this.getId(), utilisateurs, ressources);
+    }
 	
 	public ArrayList<Emprunt> getHistoriqueEmprunts() {
 	    return historiqueEmprunts;
 	}
 	
-	//Ajouter a l'historique des emprunts de l'utilisateur
 	public void ajouterHistorique(Emprunt emp) {
 	    historiqueEmprunts.add(emp);
 	}
@@ -124,6 +115,22 @@ public class Utilisateur extends Personne{
 	@Override
 	public String toString() {
 	    return "Id : " + getId() + " | Nom : " + getNom() + " | Login : " + getLogin() + " | Dette : " + getDette() + " euros" + " | Premium : " + (getIs_premium() ? "Oui" : "Non");
+	}
+	
+	public static ArrayList<Utilisateur> recupererTous() {
+	    return BDD.recupererTousLesUtilisateurs();
+	}
+	
+	public ArrayList<Emprunt> recupererEmpruntsEnCours(ArrayList<Utilisateur> utilisateurs, ArrayList<Ressource> ressources) {
+	    return BDD.recupererEmpruntsEnCoursParUtilisateur(this.getId(), utilisateurs, ressources);
+	}
+	
+	public double recupererDette() {
+	    return BDD.recuperer_dette(this.getId());
+	}
+
+	public void payerDette() {
+	    BDD.payer_dette(this.getId());
 	}
 
 }

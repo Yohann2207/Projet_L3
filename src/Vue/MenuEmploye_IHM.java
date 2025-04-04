@@ -5,8 +5,11 @@ import Controleur.Controleur;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import Personne.Employe;
+import Personne.Utilisateur;
+import Ressource.Ressource;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -24,65 +27,7 @@ public class MenuEmploye_IHM {
         this.controleur = controleur;
         this.employe = employe; 
 
-        /*fenetre = new JFrame("Menu Employé - " + employe.getNom());
-        fenetre.setSize(400, 500);
-        fenetre.setLocationRelativeTo(null);
-        fenetre.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        fenetre.setLayout(new BorderLayout());
-
-        JLabel titre = new JLabel("Bienvenue " + employe.getNom() + " !");
-        titre.setHorizontalAlignment(SwingConstants.CENTER);
-        titre.setFont(new Font("Arial", Font.BOLD, 16));
-        fenetre.add(titre, BorderLayout.NORTH);
-
-        JPanel panelBoutons = new JPanel(new GridLayout(0, 1, 10, 10));
-
-        JButton btnAjouterRessource = new JButton("Ajouter une ressource");
-        JButton btnSupprimerRessource = new JButton("Supprimer une ressource");
-        JButton btnChangerEtatRessource = new JButton("Changer état d'une ressource");
-        JButton btnAfficherRessources = new JButton("Afficher toutes les ressources");
-        JButton btnAjouterUtilisateur = new JButton("Ajouter un utilisateur");
-        JButton btnSupprimerUtilisateur = new JButton("Supprimer un utilisateur");
-        JButton btnAjouterEmploye = new JButton("Ajouter un employé");
-        JButton btnSupprimerEmploye = new JButton("Supprimer un employé");
-        JButton btnAfficherUtilisateurs = new JButton("Afficher les utilisateurs");
-        JButton btnAfficherEmployes = new JButton("Afficher les employés");
-        JButton btnDeconnexion = new JButton("Se déconnecter");
-
-        panelBoutons.add(btnAjouterRessource);
-        panelBoutons.add(btnSupprimerRessource);
-        panelBoutons.add(btnChangerEtatRessource);
-        panelBoutons.add(btnAfficherRessources);
-        panelBoutons.add(btnAjouterUtilisateur);
-        panelBoutons.add(btnSupprimerUtilisateur);
-        panelBoutons.add(btnAjouterEmploye);
-        panelBoutons.add(btnSupprimerEmploye);
-        panelBoutons.add(btnAfficherUtilisateurs);
-        panelBoutons.add(btnAfficherEmployes);       
-        panelBoutons.add(btnDeconnexion);
-
-        fenetre.add(panelBoutons, BorderLayout.CENTER);
-
-        btnAjouterRessource.addActionListener(e -> ajouterRessource());
-        btnSupprimerRessource.addActionListener(e -> supprimerRessource());
-        btnChangerEtatRessource.addActionListener(e -> changerEtatRessource());
-        btnAfficherRessources.addActionListener(e -> afficherRessources());
-        btnAjouterUtilisateur.addActionListener(e -> ajouterUtilisateur());
-        btnSupprimerUtilisateur.addActionListener(e -> supprimerUtilisateur());
-        btnAjouterEmploye.addActionListener(e -> ajouterEmploye());
-        btnSupprimerEmploye.addActionListener(e -> supprimerEmploye());
-        btnAfficherUtilisateurs.addActionListener(e -> afficherUtilisateurs());
-        btnAfficherEmployes.addActionListener(e -> afficherEmployes());
-        btnDeconnexion.addActionListener(e -> deconnexion());
-
-        fenetre.setVisible(true);
-    } */
-
-          
-    
-
-        
-
+     
         fenetre = new JFrame("Menu Employé - " + employe.getNom());
         fenetre.setSize(500, 500);
         fenetre.setLocationRelativeTo(null);
@@ -93,7 +38,6 @@ public class MenuEmploye_IHM {
         } catch (IOException e) {
         	e.printStackTrace();
         }
-        
           
         
         JPanel panneauFond = new JPanel() {
@@ -121,9 +65,11 @@ public class MenuEmploye_IHM {
         JMenuItem ajouterUtilisateur = new JMenuItem("Ajouter un utilisateur");
         JMenuItem supprimerUtilisateur = new JMenuItem("Supprimer un utilisateur");
         JMenuItem afficherUtilisateurs = new JMenuItem("Afficher les utilisateurs");
+        JMenuItem afficherEmprunts = new JMenuItem("Afficher les emprunts");
         menuUtilisateur.add(ajouterUtilisateur);
         menuUtilisateur.add(supprimerUtilisateur);
         menuUtilisateur.add(afficherUtilisateurs);
+        menuUtilisateur.add(afficherEmprunts);
         
 
         JMenu menuEmploye = new JMenu("Gestion Employé");
@@ -145,10 +91,16 @@ public class MenuEmploye_IHM {
         menuRessource.add(changerEtatRessource);
         menuRessource.add(afficherRessources);
         
+        
+        
+        
 
         menuBar.add(menuUtilisateur);
         menuBar.add(menuEmploye);
         menuBar.add(menuRessource);
+        
+        
+        
         
 
         fenetre.setJMenuBar(menuBar);
@@ -171,36 +123,14 @@ public class MenuEmploye_IHM {
         supprimerRessource.addActionListener(e -> supprimerRessource());
         changerEtatRessource.addActionListener(e -> changerEtatRessource());
         afficherRessources.addActionListener(e -> afficherRessources());
-
+        afficherEmprunts.addActionListener(e -> afficherEmprunts());
         
         
 
         fenetre.setVisible(true);
     }
 
-    /* public void ajouterRessource() {
-        String nom = JOptionPane.showInputDialog(fenetre, "Nom de la ressource :");
-        String marque = JOptionPane.showInputDialog(fenetre, "Marque :");
-        String type = JOptionPane.showInputDialog(fenetre, "Type (Ordinateur / Telephone / Tablette_graphique) :");
-        String prixStr = JOptionPane.showInputDialog(fenetre, "Prix :");
-        String dureeMaxStr = JOptionPane.showInputDialog(fenetre, "Durée max :");
-
-        try {
-            double prix = Double.parseDouble(prixStr);
-            int dureeMax = Integer.parseInt(dureeMaxStr);
-
-            boolean success = controleur.ajouterRessource(nom, marque, prix, dureeMax, type);
-
-            if (success) {
-                JOptionPane.showMessageDialog(fenetre, "Ressource ajoutée !");
-            } else {
-                JOptionPane.showMessageDialog(fenetre, "Erreur lors de l'ajout !");
-            }
-
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(fenetre, "Valeurs numériques invalides !");
-        }
-    } */
+   
     
 
     public void ajouterRessource() {
@@ -272,7 +202,7 @@ public class MenuEmploye_IHM {
 
 
 
-    
+    /*
     public void supprimerRessource() {
         String emp = controleur.afficherRessources(); 
 
@@ -317,8 +247,67 @@ public class MenuEmploye_IHM {
             }
         }
     }
+	*/
+    
+    public void supprimerRessource() {
+        controleur.synchroniserRessources();
+        ArrayList<Ressource> ressources = controleur.getRessources();
 
+        if (ressources.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Aucune ressource à supprimer.");
+            return;
+        }
 
+        JDialog dialog = new JDialog((Frame) null, "Supprimer une ressource", true);
+        dialog.setSize(500, 500);
+        dialog.setLocationRelativeTo(null);
+        dialog.setLayout(new BorderLayout());
+
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        ButtonGroup group = new ButtonGroup();
+        JRadioButton[] radioButtons = new JRadioButton[ressources.size()];
+
+        for (int i = 0; i < ressources.size(); i++) {
+            Ressource r = ressources.get(i);
+            radioButtons[i] = new JRadioButton(r.toString());
+            group.add(radioButtons[i]);
+            panel.add(radioButtons[i]);
+        }
+
+        JScrollPane scrollPane = new JScrollPane(panel);
+
+        JPanel buttonPanel = new JPanel();
+        JButton valider = new JButton("Supprimer");
+        JButton annuler = new JButton("Annuler");
+
+        valider.addActionListener(e -> {
+            for (int i = 0; i < radioButtons.length; i++) {
+                if (radioButtons[i].isSelected()) {
+                    int id = ressources.get(i).getId();
+                    boolean ok = controleur.supprimerRessource(id);
+                    JOptionPane.showMessageDialog(dialog, ok ? "Ressource supprimée !" : "Échec de la suppression.");
+                    dialog.dispose();
+                    return;
+                }
+            }
+            JOptionPane.showMessageDialog(dialog, "Veuillez sélectionner une ressource.");
+        });
+
+        annuler.addActionListener(e -> dialog.dispose());
+
+        buttonPanel.add(valider);
+        buttonPanel.add(annuler);
+
+        dialog.add(new JLabel("Sélectionnez une ressource à supprimer :"), BorderLayout.NORTH);
+        dialog.add(scrollPane, BorderLayout.CENTER);
+        dialog.add(buttonPanel, BorderLayout.SOUTH);
+
+        dialog.setVisible(true);
+    }
+    
+    
+    /*
     public void changerEtatRessource() {
         String[] etats = {"Neuf", "Abime", "Hors service", "En maintenance"};
         JComboBox<String> etat_box = new JComboBox<>(etats);
@@ -372,39 +361,87 @@ public class MenuEmploye_IHM {
             }
         }
     }
+	*/
+    
+    public void changerEtatRessource() {
+        ArrayList<Ressource> ressources = controleur.getRessources();
 
+        if (ressources.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Aucune ressource disponible.");
+            return;
+        }
+
+        JDialog dialog = new JDialog((Frame) null, "Modifier l'état d'une ressource", true);
+        dialog.setSize(500, 500);
+        dialog.setLocationRelativeTo(null);
+        dialog.setLayout(new BorderLayout());
+
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        ButtonGroup group = new ButtonGroup();
+        JRadioButton[] radioButtons = new JRadioButton[ressources.size()];
+
+        for (int i = 0; i < ressources.size(); i++) {
+            Ressource r = ressources.get(i);
+            radioButtons[i] = new JRadioButton(r.toString());
+            group.add(radioButtons[i]);
+            panel.add(radioButtons[i]);
+        }
+
+        JScrollPane scrollPane = new JScrollPane(panel);
+
+        JPanel etatPanel = new JPanel();
+        JLabel etatLabel = new JLabel("Nouvel état : ");
+        String[] etats = {"Neuf", "Abime", "Hors service", "En maintenance"};
+        JComboBox<String> etatComboBox = new JComboBox<>(etats);
+        etatPanel.add(etatLabel);
+        etatPanel.add(etatComboBox);
+
+        JPanel buttonPanel = new JPanel();
+        JButton valider = new JButton("Modifier");
+        JButton annuler = new JButton("Annuler");
+
+        valider.addActionListener(e -> {
+            for (int i = 0; i < radioButtons.length; i++) {
+                if (radioButtons[i].isSelected()) {
+                    int id = ressources.get(i).getId();
+                    String nouvelEtat = (String) etatComboBox.getSelectedItem();
+                    boolean ok = controleur.changerEtatRessource(id, nouvelEtat);
+                    JOptionPane.showMessageDialog(dialog, ok ? "État modifié !" : "Échec de la modification.");
+                    dialog.dispose();
+                    return;
+                }
+            }
+            JOptionPane.showMessageDialog(dialog, "Veuillez sélectionner une ressource.");
+        });
+
+        annuler.addActionListener(e -> dialog.dispose());
+
+        buttonPanel.add(valider);
+        buttonPanel.add(annuler);
+
+        JPanel haut = new JPanel(new BorderLayout());
+        haut.add(new JLabel("Sélectionnez une ressource :"), BorderLayout.NORTH);
+        haut.add(etatPanel, BorderLayout.SOUTH);
+
+        dialog.add(haut, BorderLayout.NORTH);
+        dialog.add(scrollPane, BorderLayout.CENTER);
+        dialog.add(buttonPanel, BorderLayout.SOUTH);
+
+        dialog.setVisible(true);
+    }
+    
+    
     public void afficherRessources() {
         String ressourcesAffichees = controleur.afficherRessources();
         JOptionPane.showMessageDialog(fenetre, ressourcesAffichees);
     }
-
-    /* public void ajouterUtilisateur() {
-        String nom = JOptionPane.showInputDialog(fenetre, "Nom de l'utilisateur :");
-        String dateNaissanceStr = JOptionPane.showInputDialog(fenetre, "Date de naissance (YYYY-MM-DD) :");
-        String login = JOptionPane.showInputDialog(fenetre, "Login :");
-
-
-        char[] mdpArray;
-        JPasswordField passwordField = new JPasswordField();
-        int option = JOptionPane.showConfirmDialog(fenetre, passwordField, "Mot de passe :", JOptionPane.PLAIN_MESSAGE);
-        if (option != JOptionPane.OK_OPTION) return;
-        mdpArray = passwordField.getPassword();
-       
-        String mdp = new String(mdpArray);
-        
-        
-        
-        
-        boolean success = controleur.ajouterUtilisateur(nom, dateNaissanceStr, login, mdp);
-
-        if (success) {
-            JOptionPane.showMessageDialog(fenetre, "Utilisateur ajouté !");
-        } else {
-            JOptionPane.showMessageDialog(fenetre, "Erreur : Login déjà existant !");
-        }
-        
+    
+    public void afficherEmprunts() {
+        String empruntsAffichees = controleur.afficherListeEmprunts();
+        JOptionPane.showMessageDialog(fenetre, empruntsAffichees);
     }
-    */
+
     
     public void ajouterUtilisateur() {
 
@@ -456,9 +493,10 @@ public class MenuEmploye_IHM {
     }
 
     
+    /*
     public void supprimerUtilisateur() {
 
-    	String emp = controleur.getListeUtilisateurs(); 
+    	String emp = controleur.afficherListeUtilisateurs(); 
 
 
         JPanel panel = new JPanel();
@@ -498,43 +536,64 @@ public class MenuEmploye_IHM {
             }
         }
     }
+	*/
+    
+    public void supprimerUtilisateur() {
+        ArrayList<Utilisateur> utilisateurs = controleur.getUtilisateurs();
 
-    /* public void ajouterEmploye() {
-        String nom = JOptionPane.showInputDialog(fenetre, "Nom de l'employé :");
-        String dateNaissanceStr = JOptionPane.showInputDialog(fenetre, "Date de naissance (YYYY-MM-DD) :");
-        String login = JOptionPane.showInputDialog(fenetre, "Login :");
-        
-        
-        char[] mdpArray;
-        JPasswordField passwordField = new JPasswordField();
-        int option = JOptionPane.showConfirmDialog(fenetre, passwordField, "Mot de passe :", JOptionPane.PLAIN_MESSAGE);
-        if (option != JOptionPane.OK_OPTION) return;
-        mdpArray = passwordField.getPassword();
-       
-        String mdp = new String(mdpArray);
-        
-        
-        
-        
-        String salaireStr = JOptionPane.showInputDialog(fenetre, "Salaire :");
-        String poste = JOptionPane.showInputDialog(fenetre, "Poste :");
-
-        try {
-            double salaire = Double.parseDouble(salaireStr);
-
-            boolean success = controleur.ajouterEmploye(nom, dateNaissanceStr, login, mdp, salaire, poste);
-
-            if (success) {
-                JOptionPane.showMessageDialog(fenetre, "Employé ajouté !");
-            } else {
-                JOptionPane.showMessageDialog(fenetre, "Erreur : Login déjà existant !");
-            }
-
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(fenetre, "Salaire invalide !");
+        if (utilisateurs.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Aucun utilisateur à supprimer.");
+            return;
         }
+
+        JDialog dialog = new JDialog((Frame) null, "Supprimer un utilisateur", true);
+        dialog.setSize(500, 500);
+        dialog.setLocationRelativeTo(null);
+        dialog.setLayout(new BorderLayout());
+
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        ButtonGroup group = new ButtonGroup();
+        JRadioButton[] radioButtons = new JRadioButton[utilisateurs.size()];
+
+        for (int i = 0; i < utilisateurs.size(); i++) {
+            Utilisateur u = utilisateurs.get(i);
+            radioButtons[i] = new JRadioButton(u.toString());
+            group.add(radioButtons[i]);
+            panel.add(radioButtons[i]);
+        }
+
+        JScrollPane scrollPane = new JScrollPane(panel);
+
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        JButton valider = new JButton("Supprimer");
+        JButton annuler = new JButton("Annuler");
+
+        valider.addActionListener(e -> {
+            for (int i = 0; i < radioButtons.length; i++) {
+                if (radioButtons[i].isSelected()) {
+                    String login = utilisateurs.get(i).getLogin();
+                    boolean ok = controleur.supprimerUtilisateur(login);
+                    JOptionPane.showMessageDialog(dialog, ok ? "Utilisateur supprimé !" : "Échec de la suppression.");
+                    dialog.dispose();
+                    return;
+                }
+            }
+            JOptionPane.showMessageDialog(dialog, "Veuillez sélectionner un utilisateur.");
+        });
+
+        annuler.addActionListener(e -> dialog.dispose());
+
+        buttonPanel.add(valider);
+        buttonPanel.add(annuler);
+
+        dialog.add(new JLabel("Sélectionnez un utilisateur à supprimer :"), BorderLayout.NORTH);
+        dialog.add(scrollPane, BorderLayout.CENTER);
+        dialog.add(buttonPanel, BorderLayout.SOUTH);
+
+        dialog.setVisible(true);
     }
-    */
+   
     
     public void ajouterEmploye() {
 
@@ -606,10 +665,10 @@ public class MenuEmploye_IHM {
         }
     }
 
-
+    /*
     public void supprimerEmploye() {
 
-    	String emp = controleur.getListeEmployes(); 
+    	String emp = controleur.afficherListeEmployes(); 
 
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
@@ -651,14 +710,72 @@ public class MenuEmploye_IHM {
             }
         }
     }
+    */
+    
+    public void supprimerEmploye() {
+        ArrayList<Employe> employes = controleur.getEmployes();
+
+        if (employes.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Aucun employé à supprimer.");
+            return;
+        }
+
+        JDialog dialog = new JDialog((Frame) null, "Supprimer un employé", true);
+        dialog.setSize(500, 500);
+        dialog.setLocationRelativeTo(null);
+        dialog.setLayout(new BorderLayout());
+
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        ButtonGroup group = new ButtonGroup();
+        JRadioButton[] radioButtons = new JRadioButton[employes.size()];
+
+        for (int i = 0; i < employes.size(); i++) {
+            Employe e = employes.get(i);
+            radioButtons[i] = new JRadioButton(e.toString()); 
+            group.add(radioButtons[i]);
+            panel.add(radioButtons[i]);
+        }
+
+        JScrollPane scrollPane = new JScrollPane(panel);
+
+        JPanel buttonPanel = new JPanel();
+        JButton valider = new JButton("Supprimer");
+        JButton annuler = new JButton("Annuler");
+
+        valider.addActionListener(e -> {
+            for (int i = 0; i < radioButtons.length; i++) {
+                if (radioButtons[i].isSelected()) {
+                    String login = employes.get(i).getLogin();
+                    boolean ok = controleur.supprimerEmploye(login);
+                    JOptionPane.showMessageDialog(dialog, ok ? "Employé supprimé !" : "Échec de la suppression.");
+                    dialog.dispose();
+                    return;
+                }
+            }
+            JOptionPane.showMessageDialog(dialog, "Veuillez sélectionner un employé.");
+        });
+
+        annuler.addActionListener(e -> dialog.dispose());
+
+        buttonPanel.add(valider);
+        buttonPanel.add(annuler);
+
+        dialog.add(new JLabel("Sélectionnez un employé à supprimer :"), BorderLayout.NORTH);
+        dialog.add(scrollPane, BorderLayout.CENTER);
+        dialog.add(buttonPanel, BorderLayout.SOUTH);
+
+        dialog.setVisible(true);
+    }
+
     
     public void afficherUtilisateurs() {
-        String utilisateursList = controleur.getListeUtilisateurs();
+        String utilisateursList = controleur.afficherListeUtilisateurs();
         JOptionPane.showMessageDialog(fenetre, utilisateursList, "Liste des Utilisateurs", JOptionPane.INFORMATION_MESSAGE);
     }
 
     public void afficherEmployes() {
-        String employesList = controleur.getListeEmployes();
+        String employesList = controleur.afficherListeEmployes();
         JOptionPane.showMessageDialog(fenetre, employesList, "Liste des Employés", JOptionPane.INFORMATION_MESSAGE);
     }
     

@@ -5,66 +5,66 @@ import java.util.ArrayList;
 import BDD.Hashage;
 
 public class Personne {
-	
-	private int id;
-	private String nom;
-	private LocalDate date_naissance;
-	private String login;
-	private String mdp;
-	
-	public Personne(int id, String nom, LocalDate date_naissance, String login, String mdp) {
-		this.id = id;
-		this.nom=nom;
-		this.date_naissance=date_naissance;
-		this.login=login;
-		this.mdp=mdp;
-	}
 
-	public int getId() {
-		return id;
-	}
+    private int id;
+    private String nom;
+    private LocalDate date_naissance;
+    private String login;
+    private String mdp;
 
-	public String getNom() {
-		return nom;
-	}
+    public Personne(int id, String nom, LocalDate date_naissance, String login, String mdp) {
+        this.id = id;
+        this.nom=nom;
+        this.date_naissance=date_naissance;
+        this.login=login;
+        this.mdp=mdp;
+    }
 
-	public void setNom(String nom) {
-		this.nom = nom;
-	}
+    public int getId() {
+        return id;
+    }
 
-	public LocalDate getDate_naissance() {
-		return date_naissance;
-	}
+    public String getNom() {
+        return nom;
+    }
 
-	public void setDate_naissance(LocalDate date_naissance) {
-		this.date_naissance = date_naissance;
-	}
+    public void setNom(String nom) {
+        this.nom = nom;
+    }
 
-	public String getLogin() {
-		return login;
-	}
+    public LocalDate getDate_naissance() {
+        return date_naissance;
+    }
 
-	public void setLogin(String login) {
-		this.login = login;
-	}
+    public void setDate_naissance(LocalDate date_naissance) {
+        this.date_naissance = date_naissance;
+    }
 
-	public String getMdp() {
-		return mdp;
-	}
+    public String getLogin() {
+        return login;
+    }
 
-	public void setMdp(String mdp) {
-		this.mdp = mdp;
-	}
-	
-	public String toString() {
-		return "Personne [nom=" + nom + ", date_naissance=" + date_naissance + ", login=" + login + ", mdp=" + mdp
-				+ "]";
-	}
-	
-	public static Personne authentifier(String login, String motDePasse, ArrayList<Utilisateur> utilisateurs, ArrayList<Employe> employes) {
-		
-	    String mdpHash = Hashage.hashermdp(motDePasse);
-		
+    public void setLogin(String login) {
+        this.login = login;
+    }
+
+    public String getMdp() {
+        return mdp;
+    }
+
+    public void setMdp(String mdp) {
+        this.mdp = mdp;
+    }
+
+    public String toString() {
+        return "Personne [nom=" + nom + ", date_naissance=" + date_naissance + ", login=" + login + ", mdp=" + mdp
+                + "]";
+    }
+
+    public static Personne authentifier(String login, String motDePasse, ArrayList<Utilisateur> utilisateurs, ArrayList<Employe> employes) {
+
+        String mdpHash = Hashage.hashermdp(motDePasse);
+
         for (Utilisateur u : utilisateurs) {
             if (u.getLogin().equals(login) && u.getMdp().equals(mdpHash)) {
                 return u;
@@ -81,3 +81,6 @@ public class Personne {
     }
 
 }
+
+ 
+ 

@@ -10,8 +10,8 @@ import BDD.BDD;
 
 public class Employe extends Personne{
 	
-	private double salaire; //a voir rajouter cu 
-	private double prime; //a voir rajouter cu 
+	private double salaire; 
+	private double prime; 
 	private String role; // exemple admin 
 	
 	public Employe(int id, String nom, LocalDate date_naissance, String login, String mdp, double salaire, String role) {
@@ -127,5 +127,9 @@ public class Employe extends Personne{
 	@Override
 	public String toString() {
 		return "Id : " + getId() + " | Nom : " + getNom() + " | Login : " + getLogin() + " | Poste : " + getRole() + " | Salaire : " + getSalaire() + " euros";	
+	}
+	
+	public static ArrayList<Employe> recupererTous() {
+	    return BDD.recupererTousLesEmployes();
 	}
 }
